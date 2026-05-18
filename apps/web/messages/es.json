@@ -1,0 +1,18 @@
+{
+  "login": {
+    "descriptor": "TECNOLOGÍA PARA VIVIR MEJOR",
+    "emailLabel": "Correo electrónico",
+    "emailPlaceholder": "tu@email.com",
+    "passwordLabel": "Contraseña",
+    "passwordPlaceholder": "Introduce tu contraseña",
+    "submit": "Acceder",
+    "submitting": "Accediendo…",
+    "error": "Credenciales incorrectas. Inténtalo de nuevo.",
+    "footer": "© {year} ViTAH. Todos los derechos reservados."
+  },
+  "dashboard": {
+    "welcome": "Bienvenido a ViTAH Control 360",
+    "signOut": "Cerrar sesión",
+    "greeting": "Hola, {email}"
+  }
+}

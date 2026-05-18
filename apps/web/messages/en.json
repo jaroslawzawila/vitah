@@ -1,0 +1,18 @@
+{
+  "login": {
+    "descriptor": "TECHNOLOGY FOR BETTER LIVING",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@email.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "submit": "Sign in",
+    "submitting": "Signing in…",
+    "error": "Invalid credentials. Please try again.",
+    "footer": "© {year} ViTAH. All rights reserved."
+  },
+  "dashboard": {
+    "welcome": "Welcome to ViTAH Control 360",
+    "signOut": "Sign out",
+    "greeting": "Hello, {email}"
+  }
+}

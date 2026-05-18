@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -12,20 +14,25 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Vitah — Your Health, Simplified",
+  title: "ViTAH — Tecnología para vivir mejor",
   description:
-    "Vitah helps you take control of your health with personalized insights, tracking, and guidance — all in one place.",
+    "Plataforma PropTech de bienestar habitable. Viviendas saludables, eficientes e inteligentes.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+        <NextIntlClientProvider messages={messages}>
+          {children}
+        </NextIntlClientProvider>
       </body>
     </html>
   );
