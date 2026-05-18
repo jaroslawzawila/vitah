@@ -14,5 +14,381 @@
     "welcome": "Welcome to ViTAH Control 360",
     "signOut": "Sign out",
     "greeting": "Hello, {email}"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "showroom": "Showroom",
+    "projects": "Projects",
+    "technical": "Technical Dept.",
+    "logistics": "Logistics",
+    "construction": "Assembly / Site",
+    "clientApp": "Client App",
+    "finance": "Finance",
+    "certifications": "Certifications"
+  },
+  "topbar": {
+    "titles": {
+      "dashboard": "Dashboard",
+      "showroom": "Showroom — Configurator & Sessions",
+      "projects": "Projects — Full Pipeline",
+      "technical": "Technical Department",
+      "logistics": "Logistics — Orders & Schedule",
+      "construction": "Assembly / Site — Tracking",
+      "clientApp": "Client App — Site Tracking",
+      "finance": "Finance — Management & Billing",
+      "certifications": "ViTAH Certifications"
+    },
+    "synced": "synced",
+    "newProject": "New Project",
+    "notifications": "Notifications",
+    "settings": "Settings"
+  },
+  "dashboardPage": {
+    "kpi": {
+      "activeProjects": { "label": "Active Projects", "sub": "+{value} this month" },
+      "activeSites": { "label": "Active Sites", "sub": "{value} new this week" },
+      "monthlyBilling": { "label": "Monthly Billing", "sub": "↑ {value} previous" },
+      "certifications2026": { "label": "Certif. 2026", "sub": "Target: {value}" }
+    },
+    "pipeline": {
+      "title": "Global Pipeline — {count} active projects",
+      "stages": {
+        "showroom": "Showroom",
+        "budget": "Budget",
+        "technical": "Technical",
+        "review": "Review",
+        "dossier": "Dossier",
+        "logistics": "Logistics",
+        "construction": "Site",
+        "certified": "Certif."
+      }
+    },
+    "activity": {
+      "title": "Recent Activity",
+      "placeholder": "Recent activity will appear here"
+    },
+    "systemStatus": {
+      "title": "ViTAH OS System Status",
+      "items": {
+        "web": { "label": "Web vitah.es", "detail": "SSL active · CDN operational" },
+        "platform": { "label": "OS Platform", "detail": "18 connected users" },
+        "apps": { "label": "iOS & Android App", "detail": "47 clients with active access" },
+        "sync": { "label": "Synchronization", "detail": "WebSocket · last sync: 2s" },
+        "bim": { "label": "BIM / Revit Link", "detail": "4 projects in BIM LOD 400" }
+      },
+      "statuses": {
+        "online": "Online",
+        "active": "Active",
+        "realtime": "Real-time",
+        "connected": "Connected"
+      }
+    }
+  },
+  "showroomPage": {
+    "activeSession": {
+      "title": "Active Session — García Ruiz",
+      "subtitle": "VTH-26-001 · Advisor: C. Vega · 140m² Detached · Santander",
+      "status": "● In progress — 52 min"
+    },
+    "stations": {
+      "digitalTwin": "Digital Twin",
+      "steelCore": "Steel Core",
+      "bioSkin": "Bio-Skin",
+      "carpentry": "Carpentry",
+      "mep360": "MEP & 360",
+      "energyZeb": "Energy ZEB",
+      "lifeFinishes": "Life — Finishes"
+    },
+    "stationDetail": {
+      "title": "ST 4 — MEP and 360 Control",
+      "subtitle": "The home's nervous system · Real-time Digital Twin App",
+      "placeholder": "MEP configuration options will appear here"
+    },
+    "upcomingVisits": {
+      "title": "Upcoming Showroom Visits",
+      "placeholder": "Upcoming scheduled visits will appear here"
+    },
+    "budgetConfigurator": {
+      "title": "Budget Configurator",
+      "areaLabel": "Built area (m²)",
+      "qualityLabel": "Finish level",
+      "levels": {
+        "standard": "Standard",
+        "premium": "Premium",
+        "luxury": "Luxury"
+      },
+      "total": "ESTIMATED TOTAL"
+    },
+    "selections": {
+      "title": "García Ruiz Selections",
+      "placeholder": "Client selections will appear here"
+    }
+  },
+  "projectsPage": {
+    "filters": {
+      "all": "All ({count})",
+      "export": "Export"
+    },
+    "table": {
+      "ref": "Reference",
+      "client": "Client",
+      "type": "Type",
+      "budget": "Budget",
+      "phase": "Phase",
+      "progress": "Progress",
+      "advisor": "Advisor",
+      "location": "Location",
+      "view": "View"
+    },
+    "phases": {
+      "showroom": "Showroom",
+      "budget": "Budget",
+      "technical": "Technical Dept.",
+      "review": "Review",
+      "dossier": "Dossier",
+      "logistics": "Logistics",
+      "construction": "On Site",
+      "certified": "Certified"
+    }
+  },
+  "technicalPage": {
+    "workQueue": {
+      "title": "Work Queue — Technical Office P2",
+      "due": "Due",
+      "tasks": {
+        "structuralCalc": "Structural calculation — Eurocode 3 EN1993",
+        "clientReview": "Basic project review with client",
+        "basicProject": "Basic project drafting 135m²",
+        "buildingPermit": "Building permit application — Camargo Council",
+        "asBuilt": "As-built drawings and building log"
+      },
+      "statuses": {
+        "inProcess": "In Process",
+        "pendingAppt": "Pending Appt.",
+        "pending": "Pending",
+        "inReview": "In Review"
+      }
+    },
+    "nextReview": {
+      "title": "Next client review",
+      "detail": "Basic project review 160m². Meeting room P2 — Torre Camargo"
+    },
+    "normativeAgent": {
+      "title": "AI Normative Agent — CTE",
+      "subtitle": "Automatic validation of 256 CTE rules",
+      "placeholder": "Normative validation status will appear here"
+    },
+    "subDepartments": {
+      "title": "Technical Sub-departments",
+      "items": {
+        "architecture": "Architecture & BIM LOD 400",
+        "structural": "Structural Calculation",
+        "installations": "Installation Projects",
+        "documentation": "Administrative Documentation",
+        "bimControl": "BIM Control & Coordination"
+      }
+    },
+    "permits": {
+      "title": "Building Permit Status",
+      "placeholder": "Permit statuses will appear here"
+    },
+    "dossier": {
+      "title": "Site Dossier Opening",
+      "placeholder": "Dossier statuses will appear here"
+    }
+  },
+  "logisticsPage": {
+    "kpi": {
+      "activeOrders": "Active Orders",
+      "inTransit": "In Transit",
+      "delivered": "Delivered (month)",
+      "pendingGeneration": "Pending Generation"
+    },
+    "orders": {
+      "title": "Material Orders",
+      "newOrder": "New Order",
+      "project": "Project",
+      "material": "Material",
+      "supplier": "Supplier",
+      "ordered": "Ordered",
+      "eta": "ETA",
+      "status": "Status",
+      "statuses": {
+        "inTransit": "In Transit",
+        "confirmed": "Confirmed",
+        "ordered": "Ordered",
+        "delivered": "Delivered",
+        "pending": "Pending"
+      }
+    },
+    "jit": {
+      "title": "JIT Schedule — VTH-26-003 Torres Const.",
+      "stages": {
+        "foundation": "Foundation",
+        "steelDelivery": "Steel delivery",
+        "structureAssembly": "Structure asm.",
+        "thermochip": "Thermochip",
+        "envelope": "Envelope",
+        "carpentry": "Carpentry",
+        "mep": "MEP",
+        "delivery": "Delivery + Cert."
+      },
+      "description": "JIT system: deliveries coordinated with assembly milestones · No dead stock on site · Real-time LME steel monitoring"
+    }
+  },
+  "constructionPage": {
+    "projectInfo": {
+      "subtitle": "Duplex 175m² · Torrelavega · Site manager: A. Pérez",
+      "week": "Week {current}/{total}"
+    },
+    "milestones": {
+      "title": "Site Milestones — Validation & Photography",
+      "photos": "photos · Client validated",
+      "inProgress": "In progress",
+      "items": {
+        "foundation": "Layout and Foundation",
+        "steelStructure": "Steel structure assembled",
+        "roofSeal": "Roof and waterproofing",
+        "bioSkin": "Bio-Skin envelope completed",
+        "exteriorCarpentry": "Exterior carpentry installed",
+        "mepRoughIn": "MEP rough-in installations",
+        "drywall": "Drywall and plaster",
+        "interiorFinishes": "Interior finishes",
+        "finalInstallations": "Final installations",
+        "handover": "Key Handover + ViTAH Certification"
+      }
+    },
+    "activeSites": {
+      "title": "Active Sites",
+      "notes": {
+        "pendingPermit": "Pending permit"
+      }
+    },
+    "photos": {
+      "title": "Site Photos — H5 Carpentry",
+      "view": "View photo",
+      "upload": "Upload photo"
+    },
+    "qualityControl": {
+      "title": "Quality Control",
+      "items": {
+        "layout": { "name": "Layout OK", "detail": "Tolerance ±5mm" },
+        "structurePlumb": { "name": "Structure plumbed", "detail": "0.2% max deviation" },
+        "blowerDoor": { "name": "Blower Door Test", "detail": "0.6 ACH@50Pa ✓" },
+        "thermochipSeal": { "name": "Thermochip sealed", "detail": "No thermal bridges" },
+        "mepRoughIn": { "name": "MEP rough-in", "detail": "Pending milestone H6" }
+      }
+    }
+  },
+  "clientAppPage": {
+    "title": "ViTAH Client App — Owner Experience",
+    "subtitle": "Real-time sync with ViTAH OS · Simulation for Torres Const. (VTH-26-003)",
+    "overview": {
+      "title": "My ViTAH Home",
+      "subtitle": "Duplex 175m² · Torrelavega",
+      "completed": "completed",
+      "stats": {
+        "currentWeek": "Current week",
+        "activeMilestone": "Active milestone",
+        "estimatedDelivery": "Est. delivery"
+      }
+    },
+    "milestones": {
+      "title": "Milestones",
+      "photos": "photos",
+      "items": {
+        "foundation": "Layout and Foundation",
+        "steelStructure": "Steel structure",
+        "roofSeal": "Roof and waterproofing",
+        "bioSkin": "Bio-Skin envelope",
+        "exteriorCarpentry": "Exterior carpentry",
+        "mepInstallations": "MEP installations",
+        "drywall": "Interior drywall",
+        "interiorFinishes": "Interior finishes",
+        "finalInstallations": "Final installations",
+        "handover": "Handover + ViTAH Certification"
+      }
+    },
+    "documents": {
+      "title": "Documentation",
+      "folders": {
+        "basicProject": "Basic Project",
+        "constructionPlans": "Construction Plans",
+        "licenses": "Licenses",
+        "qualityControl": "Quality Control",
+        "photos": "Photographs",
+        "certifications": "Certifications",
+        "warranties": "Warranties",
+        "buildingBook": "Building Book",
+        "insurance": "Insurance"
+      }
+    },
+    "mobilePreview": {
+      "label": "ViTAH iOS & Android App",
+      "subtitle": "Site Tracking",
+      "myHome": "My Home",
+      "progress": "Progress",
+      "milestones": "Milestones"
+    }
+  },
+  "financePage": {
+    "kpi": {
+      "billingYtd": { "label": "Billing YTD", "sub": "Target: {value}" },
+      "grossMargin": { "label": "Gross Margin", "sub": "Target: {value} ✓" },
+      "pendingCollection": { "label": "Pending Collection", "sub": "{value} active invoices" },
+      "materialCost": { "label": "Material Cost", "sub": "YTD · {value} protected" }
+    },
+    "chart": {
+      "title": "Billing vs Costs 2026 (K€)",
+      "revenue": "Revenue",
+      "costs": "Costs",
+      "marginYtd": "Accumulated margin YTD",
+      "projectedMargin": "Annual margin projection",
+      "capexFund": "CAPEX contingency fund"
+    },
+    "invoices": {
+      "title": "Pending Invoices",
+      "due": "Due",
+      "totalPending": "Total pending collection",
+      "statuses": {
+        "dueSoon": "Due soon",
+        "issued": "Issued"
+      }
+    },
+    "costControl": {
+      "title": "Cost Control by Project"
+    }
+  },
+  "certificationsPage": {
+    "kpi": {
+      "issued2026": { "label": "Certif. Issued 2026", "sub": "Target: {value} annual" },
+      "pendingApproval": { "label": "Pending Approval", "sub": "Active sites" },
+      "autoGenActive": { "label": "Auto-gen Active", "sub": "End-of-site detected" }
+    },
+    "recent": {
+      "title": "Recent ViTAH Certifications",
+      "issued": "Issued",
+      "warranty50": "50-year warranty",
+      "autoDetection": {
+        "title": "Automatic end-of-site detection",
+        "description": "ViTAH OS detects H10 milestone validation and automatically generates the PDF certificate, registers it in the digital Building Book, and notifies the client via app."
+      }
+    },
+    "preview": {
+      "title": "ViTAH Certificate — Preview",
+      "subtitle": "Automatic generation upon end-of-site validation · Automatically sent to client",
+      "certTitle": "CONSTRUCTION QUALITY CERTIFICATE",
+      "projectDescription": "Detached Home 120m² · Castro Urdiales · Cantabria",
+      "specs": {
+        "blowerDoor": "Blower Door",
+        "energy": "Energy",
+        "structure": "Structure",
+        "airtightness": "Airtightness",
+        "acoustics": "Acoustics",
+        "buildingBook": "Building Book"
+      },
+      "issuedDigitally": "Digitally issued",
+      "download": "Download Certificate PDF"
+    }
   }
 }
