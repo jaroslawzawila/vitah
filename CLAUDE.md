@@ -1,0 +1,145 @@
+# ViTAH — Monorepo
+
+PropTech platform for healthy, efficient, intelligent homes. Tagline: "Tecnología para vivir mejor".
+
+## Architecture
+
+Turborepo monorepo with pnpm@9.0.0 workspaces.
+
+### Apps
+
+| App | Package name | Port | Purpose |
+|-----|-------------|------|---------|
+| `apps/web` | `web` | 3000 | Admin portal — login, dashboard, client-facing |
+| `apps/app` | `docs` | 3001 | Internal app |
+
+### Shared Packages
+
+| Package | Name | Purpose |
+|---------|------|---------|
+| `packages/auth` | `@repo/auth` | NextAuth.js v5 config (Credentials provider, JWT sessions) |
+| `packages/shared` | `@repo/ui` | React UI components (exports `./src/*.tsx`) |
+| `packages/eslint-config` | `@repo/eslint-config` | ESLint configs (`./base`, `./next-js`, `./react-internal`) |
+| `packages/typescript-config` | `@repo/typescript-config` | Shared tsconfig (`base.json`, `nextjs.json`, `react-library.json`) |
+
+## Commands
+
+```bash
+pnpm exec turbo dev                  # Run all apps
+pnpm exec turbo dev --filter=web     # Run web only (port 3000)
+pnpm exec turbo build                # Build all
+pnpm exec turbo build --filter=web   # Build web only
+pnpm exec turbo lint                 # Lint all
+pnpm exec turbo check-types          # Type check all
+pnpm run format                      # Prettier format all
+```
+
+## Tech Stack
+
+- **Next.js 16.2.0** (App Router, Turbopack)
+- **React 19.2.0** / TypeScript 5.9.2
+- **NextAuth.js 5.0.0-beta.31** — Credentials provider, JWT sessions
+- **next-intl 4.12.0** — i18n (Spanish default, English)
+- **CSS Modules** — no Tailwind, no CSS-in-JS
+- **Geist fonts** — loaded locally (woff), used as Calibri substitute
+
+## Key Conventions
+
+### API-first: every backend feature must be shared
+
+When adding any API route, server action, or backend logic:
+- Put shared auth/business logic in `packages/` (e.g., `@repo/auth`)
+- Both `apps/web` and `apps/app` must be able to consume it
+- Each app has its own `auth.ts` that re-exports from `@repo/auth`
+- Each app has its own `app/api/auth/[...nextauth]/route.ts`
+
+### Mobile-first responsive design (apps/web)
+
+`apps/web` must always be mobile-friendly:
+- Design mobile layout first, enhance for desktop with `min-width` media queries
+- Test at 320px, 480px, 768px, 1024px breakpoints
+- Touch targets minimum 44px
+- No horizontal scroll at any viewport width
+- Use `clamp()` for fluid typography where appropriate
+
+### ViTAH Brand Identity
+
+**Color palette** (CSS custom properties in `globals.css`):
+- `--grafito: #1e1e1e` — primary dark background
+- `--verde-oliva: #6b7a4a` — accent (buttons, interactive elements)
+- `--verde-oliva-hover: #7d8e58` — hover state
+- `--blanco-calido: #e8e7e2` — text on dark, light surfaces
+- `--verde-oscuro: #37505a` — secondary accent
+- `--error: #c75050` — error states
+
+**Design style:** "Minimalista de Lujo" — generous whitespace, no decorative effects, no shadows on logo, subtle transitions.
+
+**Logo:** Wordmark "ViTAH" (note casing: V-i-T-A-H) with wide letter-spacing. Always paired with descriptor "TECNOLOGÍA PARA VIVIR MEJOR" in uppercase.
+
+**Approved logo backgrounds:** Grafito, Blanco Cálido, Verde Oscuro only.
+
+**Do NOT use:** orange #D4500A, navy #1A2B4A (old Framer SF brand colors).
+
+### i18n
+
+- Default locale: `es` (Spanish)
+- Supported: `es`, `en`
+- Translation files: `apps/web/messages/{locale}.json`
+- Config: `apps/web/i18n/request.ts`
+- All user-facing text must use `useTranslations()` — never hardcode strings
+- Add keys to both `es.json` and `en.json` when adding new text
+
+### Auth
+
+- Config lives in `packages/auth/src/index.ts`
+- Phase 1: demo credentials via `.env.local` (`DEMO_USER_EMAIL`, `DEMO_USER_PASSWORD`)
+- `NEXTAUTH_SECRET` required in each app's `.env.local`
+- Login page is `/`, authenticated users redirect to `/dashboard`
+- Middleware protects all routes except `/`, `/api/auth/*`, and static assets
+
+### TypeScript
+
+- `declaration: false` in app tsconfigs (required for next-auth type inference)
+- `noUncheckedIndexedAccess: true` — always handle possible `undefined` on index access
+- `strictNullChecks: true`
+- No `@/` path alias — use relative imports
+
+### CSS
+
+- CSS Modules for component-scoped styles (`.module.css`)
+- Global brand tokens in `globals.css` via CSS custom properties
+- Dark theme by default (`color-scheme: dark`)
+- Semantic variable names: `--background`, `--foreground`, `--muted`, `--input-bg`, `--input-border`
+
+### File structure patterns
+
+```
+apps/web/
+  auth.ts                          # Re-exports from @repo/auth
+  middleware.ts                    # Route protection
+  i18n/request.ts                  # next-intl config
+  messages/{locale}.json           # Translation strings
+  app/
+    page.tsx                       # Login page (Server Component)
+    layout.tsx                     # Root layout with NextIntlClientProvider
+    globals.css                    # Brand tokens
+    actions/auth.ts                # Server actions for login
+    components/LoginForm.tsx       # Client Component with useActionState
+    dashboard/page.tsx             # Authenticated placeholder
+    api/auth/[...nextauth]/route.ts
+```
+
+## Environment Variables
+
+Each app needs `.env.local` (not committed):
+```
+NEXTAUTH_SECRET=<generated-secret>
+DEMO_USER_EMAIL=admin@vitah.es
+DEMO_USER_PASSWORD=vitah2026
+```
+
+## Brand Reference
+
+Design docs in `/doc/`:
+- `ViTAH_Libro_de_Estilo_v1.pdf` — full brand book (colors, typography, logo usage, voice & tone)
+- `Diseño Showroom ViTAH- Experiencia de Vivienda Sal....pdf` — showroom experience design

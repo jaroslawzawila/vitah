@@ -2,6 +2,8 @@
   --grafito: #1e1e1e;
   --verde-oliva: #6b7a4a;
   --verde-oliva-hover: #7d8e58;
+  --verde-oliva-dark: #4a5e2c;
+  --verde-oliva-light: #8a9b62;
   --blanco-calido: #e8e7e2;
   --verde-oscuro: #37505a;
 
@@ -11,6 +13,28 @@
   --input-bg: #2a2a2a;
   --input-border: #3a3a3a;
   --error: #c75050;
+
+  /* Admin portal theme (light) */
+  --admin-bg: #f5f4f0;
+  --admin-card: #ffffff;
+  --admin-card-border: #e0ded8;
+  --admin-foreground: #1e1e1e;
+  --admin-muted: #8a8a82;
+  --admin-muted-bg: #f0efe8;
+  --admin-separator: #f5f4f0;
+  --admin-sidebar-bg: #12120e;
+  --admin-sidebar-text: #8a8a82;
+  --admin-sidebar-active-bg: rgba(107, 122, 74, 0.2);
+  --admin-sidebar-active-text: #e8e7e2;
+  --admin-topbar-bg: #ffffff;
+  --admin-topbar-border: #e0ded8;
+
+  /* Semantic status colors */
+  --status-orange: #c4632a;
+  --status-blue: #2a5a8a;
+  --status-teal: #2a6b7a;
+  --status-green: #2a7a4a;
+  --status-brown: #8b5e3c;
 }
 
 *,
