@@ -19,6 +19,7 @@ Turborepo monorepo with pnpm@9.0.0 workspaces.
 |---------|------|---------|
 | `packages/auth` | `@repo/auth` | NextAuth.js v5 config (Credentials provider, JWT sessions) |
 | `packages/shared` | `@repo/ui` | React UI components (exports `./src/*.tsx`) |
+| `packages/tailwind-config` | `@repo/tailwind-config` | Shared Tailwind v4 theme with ViTAH brand tokens |
 | `packages/eslint-config` | `@repo/eslint-config` | ESLint configs (`./base`, `./next-js`, `./react-internal`) |
 | `packages/typescript-config` | `@repo/typescript-config` | Shared tsconfig (`base.json`, `nextjs.json`, `react-library.json`) |
 
@@ -40,7 +41,8 @@ pnpm run format                      # Prettier format all
 - **React 19.2.0** / TypeScript 5.9.2
 - **NextAuth.js 5.0.0-beta.31** — Credentials provider, JWT sessions
 - **next-intl 4.12.0** — i18n (Spanish default, English)
-- **CSS Modules** — no Tailwind, no CSS-in-JS
+- **Tailwind CSS 4.3.0** + **shadcn/ui** — utility-first CSS with component library
+- **CSS Modules** — used alongside Tailwind for complex layout styles
 - **Geist fonts** — loaded locally (woff), used as Calibri substitute
 
 ## Key Conventions
@@ -102,11 +104,19 @@ When adding any API route, server action, or backend logic:
 - `declaration: false` in app tsconfigs (required for next-auth type inference)
 - `noUncheckedIndexedAccess: true` — always handle possible `undefined` on index access
 - `strictNullChecks: true`
-- No `@/` path alias — use relative imports
+- Path alias `@/*` maps to project root (configured in `tsconfig.json`)
 
-### CSS
+### CSS & Styling
 
-- CSS Modules for component-scoped styles (`.module.css`)
+- **Tailwind CSS v4** — CSS-first config, no `tailwind.config.js`
+  - Shared theme: `@import "@repo/tailwind-config/theme.css"` (brand colors available as `bg-verde-oliva`, `text-blanco-calido`, etc.)
+  - PostCSS plugin: `@tailwindcss/postcss` (configured in `postcss.config.mjs`)
+  - `@theme inline` block in `globals.css` maps shadcn CSS vars to Tailwind color tokens
+- **shadcn/ui** — add components with `pnpm dlx shadcn@latest add <component> --cwd apps/web`
+  - Components land in `apps/web/components/ui/`
+  - Uses `class-variance-authority`, `clsx`, `tailwind-merge`
+  - Utility: `cn()` from `@/lib/utils` for conditional class merging
+- **CSS Modules** — still used for complex layout styles (`.module.css`)
 - Global brand tokens in `globals.css` via CSS custom properties
 - Dark theme by default (`color-scheme: dark`)
 - Semantic variable names: `--background`, `--foreground`, `--muted`, `--input-bg`, `--input-border`
@@ -117,12 +127,15 @@ When adding any API route, server action, or backend logic:
 apps/web/
   auth.ts                          # Re-exports from @repo/auth
   middleware.ts                    # Route protection
+  postcss.config.mjs               # @tailwindcss/postcss plugin
   i18n/request.ts                  # next-intl config
   messages/{locale}.json           # Translation strings
+  lib/utils.ts                     # cn() utility for Tailwind class merging
+  components/ui/                   # shadcn/ui components
   app/
     page.tsx                       # Login page (Server Component)
     layout.tsx                     # Root layout with NextIntlClientProvider
-    globals.css                    # Brand tokens
+    globals.css                    # Tailwind imports, shadcn theme, brand tokens
     actions/auth.ts                # Server actions for login
     components/LoginForm.tsx       # Client Component with useActionState
     dashboard/page.tsx             # Authenticated placeholder
