@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ViTAH OS — Plataforma de Gestión</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--g:#6B7A4A;--gd:#4A5E2C;--gl:#8A9B62;--dark:#1E1E1E;--warm:#E8E7E2;--cream:#F5F4F0;--or:#C4632A;--bl:#2A5A8A;--tl:#2A6B7A;--sb:#12120E;--border:#E0DED8}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,sans-serif;background:var(--cream);display:flex;height:100vh;overflow:hidden;font-size:13px}
+button{cursor:pointer;font-family:inherit}
+input[type=range]{accent-color:var(--g);width:100%}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-thumb{background:#D4D3CE;border-radius:3px}
+
+#sidebar{width:210px;background:var(--sb);display:flex;flex-direction:column;flex-shrink:0}
+#logo{padding:18px 16px 14px;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;gap:10px}
+#logo .mark{width:32px;height:32px;background:var(--g);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;color:white;font-size:16px;font-style:italic}
+#logo .brand{color:#E8E7E2;font-weight:700;font-size:15px;letter-spacing:.5px}
+#logo .sub{color:var(--g);font-size:8px;letter-spacing:2px;text-transform:uppercase}
+nav{flex:1;padding:8px 0;overflow-y:auto}
+nav button{width:100%;display:flex;align-items:center;gap:9px;padding:9px 16px;border:none;background:transparent;color:#8A8A82;cursor:pointer;text-align:left;font-size:12.5px;border-left:3px solid transparent;transition:all .12s}
+nav button.active{background:rgba(107,122,74,.2);color:#E8E7E2;border-left-color:var(--g)}
+nav button:hover:not(.active){background:rgba(255,255,255,.04);color:#B0B0A8}
+#user-area{padding:12px 16px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:8px}
+#user-area .avatar{width:26px;height:26px;border-radius:50%;background:var(--gd);display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:700}
+#user-area .name{color:#E8E7E2;font-size:11px;font-weight:600}
+#user-area .loc{color:var(--g);font-size:9px}
+
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+#topbar{height:52px;background:white;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0}
+#topbar .title{flex:1;font-size:14px;font-weight:600;color:var(--dark)}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--g);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.btn-primary{display:flex;align-items:center;gap:6px;padding:6px 12px;background:var(--g);color:white;border:none;border-radius:6px;font-size:12px;font-weight:500}
+.btn-primary:hover{background:var(--gd)}
+.btn-icon{width:32px;height:32px;border:1px solid var(--border);background:white;border-radius:7px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px}
+#content{flex:1;overflow-y:auto;padding:16px 20px}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.mb12{margin-bottom:12px}.mb16{margin-bottom:16px}
+.card{background:white;border-radius:10px;border:1px solid var(--border);padding:16px}
+.card-title{font-size:13px;font-weight:600;color:var(--dark);margin-bottom:12px}
+.card-sm{background:white;border-radius:9px;border:1px solid var(--border);padding:14px}
+.chip{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;white-space:nowrap}
+.row-sep{border-bottom:1px solid #F5F4F0}
+.muted{color:#8A8A82;font-size:11px}
+.pbar-wrap{height:4px;background:#E8E7E2;border-radius:2px;overflow:hidden}
+.pbar-fill{height:100%;border-radius:2px}
+
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead tr{background:#F5F4F0;border-bottom:1px solid var(--border)}
+th{padding:8px 12px;text-align:left;font-size:11px;font-weight:600;color:#6B6B6B}
+td{padding:9px 12px;border-bottom:1px solid #F5F4F0}
+tr:hover td{background:#FAFAF8}
+
+.badge-green{background:#6B7A4A22;color:#4A5E2C}
+.badge-orange{background:#C4632A22;color:#C4632A}
+.badge-blue{background:#2A5A8A22;color:#2A5A8A}
+.badge-muted{background:#F0EFE8;color:#8A8A82}
+
+.cert-preview{border:2px solid var(--g);border-radius:12px;padding:20px;background:#FAFAF8;text-align:center}
+.mobile-shell{width:220px;border:3px solid var(--dark);border-radius:28px;overflow:hidden;background:var(--cream);box-shadow:0 8px 28px rgba(0,0,0,.18)}
+.mobile-header{background:var(--g);padding:12px 14px 8px;text-align:center}
+.mobile-body{padding:10px;max-height:520px;overflow-y:auto}
+
+.hito-row{display:flex;gap:10px;padding:8px;border-radius:8px;margin-bottom:3px}
+.hito-circle{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.station-pill{height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;transition:all .15s}
+
+.tab-btn{padding:6px 14px;border-radius:6px;border:none;font-size:11px;font-weight:500;transition:all .12s}
+.tab-btn.active{background:var(--g);color:white}
+.tab-btn:not(.active){background:#F5F4F0;color:#6B6B6B}
+.tab-btn:not(.active):hover{background:#EAE9E4}
+
+.toggle-section{display:none}.toggle-section.show{display:block}
+
+.pipeline-box{text-align:center;flex:1}
+.pipeline-count{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:white;margin:0 auto 5px}
+.pipeline-sep{color:#D4D3CE;font-size:14px;flex-shrink:0;padding:0 2px;margin-top:-16px}
+
+.bar-chart{display:flex;align-items:flex-end;gap:8px;height:120px;padding:0 8px}
+.bar-group{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.bar-cols{display:flex;gap:2px;align-items:flex-end;flex:1}
+.bar-rev{width:16px;border-radius:3px 3px 0 0;background:var(--g)}
+.bar-cost{width:16px;border-radius:3px 3px 0 0;background:#8A9B6266}
+.bar-label{font-size:10px;color:#8A8A82}
+
+.status-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid #F5F4F0}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<div id="sidebar">
+  <div id="logo">
+    <div class="mark">V</div>
+    <div><div class="brand">ViTAH</div><div class="sub">OS Platform</div></div>
+  </div>
+  <nav id="nav">
+    <button class="active" onclick="setView('dashboard',this)"><span>⊞</span> Dashboard</button>
+    <button onclick="setView('showroom',this)"><span>⌂</span> Showroom</button>
+    <button onclick="setView('projects',this)"><span>◫</span> Proyectos</button>
+    <button onclick="setView('technical',this)"><span>⚙</span> Dpto. Técnico</button>
+    <button onclick="setView('logistics',this)"><span>◈</span> Logística</button>
+    <button onclick="setView('construction',this)"><span>◧</span> Montaje / Obra</button>
+    <button onclick="setView('client-app',this)"><span>▣</span> App Cliente</button>
+    <button onclick="setView('finance',this)"><span>◉</span> Finanzas</button>
+    <button onclick="setView('certifications',this)"><span>◆</span> Certificaciones</button>
+  </nav>
+  <div id="user-area">
+    <div class="avatar">A</div>
+    <div><div class="name">Admin ViTAH</div><div class="loc">Santander · HQ</div></div>
+  </div>
+</div>
+
+<div id="main">
+  <div id="topbar">
+    <div class="title" id="view-title">Dashboard</div>
+    <div style="display:flex;align-items:center;gap:5px">
+      <div class="sync-dot"></div>
+      <span style="font-size:10px;color:#6B6B6B">Web · Plataforma · App <strong style="color:var(--g)">sincronizados</strong></span>
+    </div>
+    <button class="btn-primary" onclick="alert('Nuevo proyecto creado')">+ Nuevo Proyecto</button>
+    <button class="btn-icon" onclick="alert('3 notificaciones pendientes')">🔔</button>
+    <button class="btn-icon" onclick="alert('Configuración del sistema')">⚙</button>
+  </div>
+  <div id="content"></div>
+</div>
+
+<script>
+const G='#6B7A4A',GD='#4A5E2C',GL='#8A9B62',DARK='#1E1E1E',OR='#C4632A',BL='#2A5A8A',TL='#2A6B7A';
+const EUR=n=>'€'+Number(n).toLocaleString('es-ES');
+const SL=['Showroom','Presupuesto','Dpto. Técnico','Revisión','Dossier','Logística','En Obra','Certificado'];
+const SC=[G,GL,GD,OR,'#8B5E3C',TL,BL,'#1E6B3A'];
+const PX=[
+  {id:1,ref:'VTH-26-001',client:'García Ruiz',m2:140,type:'Unifamiliar',sN:0,pct:12,budget:285000,adv:'C. Vega',loc:'Santander',dt:'28 Abr'},
+  {id:2,ref:'VTH-26-002',client:'Martínez López',m2:98,type:'Adosado',sN:2,pct:38,budget:198000,adv:'I. Orbegozo',loc:'Camargo',dt:'15 Mar'},
+  {id:3,ref:'VTH-26-003',client:'Torres Const.',m2:175,type:'Dúplex',sN:6,pct:62,budget:340000,adv:'A. Pérez',loc:'Torrelavega',dt:'10 Ene'},
+  {id:4,ref:'VTH-25-047',client:'Rodríguez Blanco',m2:120,type:'Unifamiliar',sN:7,pct:100,budget:245000,adv:'C. Sainz',loc:'Castro Urd.',dt:'5 Sep 25'},
+  {id:5,ref:'VTH-26-004',client:'Fernández Díaz',m2:160,type:'Unifamiliar',sN:4,pct:52,budget:310000,adv:'M. Ruiz',loc:'Santander',dt:'2 Feb'},
+  {id:6,ref:'VTH-26-005',client:'Blanco Herrero',m2:135,type:'Unifamiliar',sN:1,pct:25,budget:265000,adv:'L. Gómez',loc:'Santander',dt:'14 Abr'},
+];
+let m2=140,qual='premium',appTab='overview';
+
+function chip(n){return`<span class="chip" style="background:${SC[n]}22;color:${SC[n]}">${SL[n]}</span>`}
+function pbar(pct,c=G,h=4){return`<div class="pbar-wrap" style="height:${h}px"><div class="pbar-fill" style="width:${Math.min(pct,100)}%;background:${c}"></div></div>`}
+
+function views(){return{
+  dashboard:`
+  <div class="grid4 mb12">
+    ${[{l:'Proyectos Activos',v:'18',sub:'+3 este mes',c:G,i:'◎'},{l:'Obras en Curso',v:'6',sub:'2 nuevas semana',c:BL,i:'◉'},{l:'Facturación Mes',v:'124K€',sub:'↑ +12% anterior',c:GD,i:'◈'},{l:'Certif. 2026',v:'23',sub:'Objetivo: 40',c:'#1E6B3A',i:'◆'}].map(k=>`
+    <div class="card-sm">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div><div class="muted" style="margin-bottom:6px">${k.l}</div><div style="font-size:24px;font-weight:700;color:${DARK}">${k.v}</div><div style="font-size:11px;color:${k.c};margin-top:3px">${k.sub}</div></div>
+        <div style="width:34px;height:34px;border-radius:8px;background:${k.c}18;display:flex;align-items:center;justify-content:center;font-size:18px;color:${k.c}">${k.i}</div>
+      </div>
+    </div>`).join('')}
+  </div>
+  <div class="card mb12">
+    <div class="card-title">Pipeline Global — ${PX.length} proyectos activos</div>
+    <div style="display:flex;align-items:center">
+      ${[{l:'Showroom',n:3,c:G},{l:'Presupuesto',n:2,c:GL},{l:'Técnico',n:4,c:GD},{l:'Revisión',n:1,c:OR},{l:'Dossier',n:2,c:'#8B5E3C'},{l:'Logística',n:2,c:TL},{l:'Obra',n:3,c:BL},{l:'Certif.',n:8,c:'#1E6B3A'}].map((s,i,a)=>`
+      <div class="pipeline-box">
+        <div class="pipeline-count" style="background:${s.c}">${s.n}</div>
+        <div style="font-size:10px;color:#8A8A82;line-height:1.2">${s.l}</div>
+      </div>${i<a.length-1?`<div class="pipeline-sep">›</div>`:''}`).join('')}
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">Actividad Reciente</div>
+      ${[{p:'García Ruiz',a:'Estación 4 completada — MEP seleccionado',t:'Hace 12 min',c:G},{p:'Torres Const.',a:'H6 validado — MEP rough-in completado',t:'Hace 1h',c:BL},{p:'Martínez López',a:'Proyecto básico enviado a revisión cliente',t:'Hace 3h',c:GD},{p:'Fernández Díaz',a:'Pedido de carpintería confirmado por proveedor',t:'Ayer 16:42',c:TL}].map(a=>`
+      <div style="display:flex;gap:10px;margin-bottom:10px">
+        <div class="dot" style="background:${a.c};margin-top:4px"></div>
+        <div><div style="font-size:12px;font-weight:600;color:${DARK}">${a.p}</div>
+        <div style="font-size:11px;color:#6B6B6B;margin-top:1px">${a.a}</div>
+        <div style="font-size:10px;color:#AAAAAA">${a.t}</div></div>
+      </div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="card-title">Estado del Sistema ViTAH OS</div>
+      ${[{l:'Web vitah.es',s:'Online',c:'#2A7A4A',d:'SSL activo · CDN operativo'},{l:'Plataforma OS',s:'Activo',c:G,d:'18 usuarios conectados'},{l:'App iOS & Android',s:'Activo',c:G,d:'47 clientes con acceso activo'},{l:'Sincronización',s:'Tiempo real',c:BL,d:'WebSocket · última sync: 2s'},{l:'BIM / Revit Link',s:'Conectado',c:GD,d:'4 proyectos en BIM LOD 400'}].map(x=>`
+      <div class="status-row">
+        <div><div style="font-size:12px;color:${DARK};font-weight:500">${x.l}</div><div class="muted">${x.d}</div></div>
+        <span class="chip" style="background:${x.c}18;color:${x.c}">${x.s}</span>
+      </div>`).join('')}
+    </div>
+  </div>`,
+
+  showroom:`
+  <div style="display:grid;grid-template-columns:1fr 330px;gap:12px">
+    <div>
+      <div class="card mb12">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+          <div><div style="font-size:13px;font-weight:700;color:${DARK}">Sesión Activa — García Ruiz</div>
+          <div class="muted" style="margin-top:2px">VTH-26-001 · Asesor: C. Vega · 140m² Unifamiliar · Santander</div></div>
+          <span class="chip" style="background:${G}22;color:${G}">● En curso — 52 min</span>
+        </div>
+        <div style="display:flex;gap:4px;align-items:flex-start">
+          ${[['0','Gemelo Digital',true],['1','Core Acero',true],['2','Bio-Skin',true],['3','Carpintería',true],['4','MEP & 360',false,true],['5','Energy ZEB',false],['6','Life — Acabados',false]].map(([id,l,done,act])=>`
+          <div style="flex:1;text-align:center">
+            <div class="station-pill" style="background:${done?G:act?OR:'#F0EFE8'};margin-bottom:4px">
+              <span style="color:${done||act?'white':'#AAAAAA'};font-size:9px;font-weight:700">${done?'✓':act?'▶':id}</span>
+            </div>
+            <div style="font-size:9px;color:#8A8A82;line-height:1.2">${l}</div>
+          </div>`).join('')}
+        </div>
+      </div>
+      <div class="card mb12">
+        <div style="font-size:13px;font-weight:700;color:${DARK};margin-bottom:4px">EST 4 — MEP y Control 360</div>
+        <div class="muted mb12">Sistema nervioso de la vivienda · App Gemelo Digital en tiempo real</div>
+        ${[{l:'Domótica',opts:['KNX Premium','KNX Standard','Modbus Básico'],s:0},{l:'Ventilación VMC',opts:['Zehnder ComfoAir 350','Daikin VRV IV','Zehnder Basic'],s:0},{l:'Suelo Radiante',opts:['Uponor PEX-a Completo','Solo Planta Baja','Sin suelo radiante'],s:0},{l:'Contadores y EMS',opts:['Schneider IEM 3000','Schneider Basic','Solo monofásico'],s:0}].map(it=>`
+        <div style="margin-bottom:10px">
+          <div class="muted" style="margin-bottom:5px">${it.l}</div>
+          <div style="display:flex;gap:5px">
+            ${it.opts.map((o,i)=>`<button onclick="alert('Seleccionado: ${o}')" style="padding:5px 9px;font-size:11px;border-radius:6px;border:${i===it.s?`1.5px solid ${G}`:'1px solid var(--border)'};background:${i===it.s?G+'18':'white'};color:${i===it.s?GD:DARK};font-weight:${i===it.s?600:400}">${o}</button>`).join('')}
+          </div>
+        </div>`).join('')}
+        <button onclick="alert('Estación 4 confirmada — avanzando a Estación 5')" class="btn-primary" style="margin-top:4px">Confirmar Estación 4 → Energy ZEB</button>
+      </div>
+      <div class="card">
+        <div class="card-title">Próximas Visitas al Showroom</div>
+        ${[{c:'Suárez Galindo',t:'Hoy 17:00',adv:'C. Vega',n:'Primera visita — interés 150m²'},{c:'Arce & Romero',t:'Mañana 10:30',adv:'I. Orbegozo',n:'Segunda visita — decidiendo acabados'},{c:'Fuentes Ibáñez',t:'Jue 15 May 11:00',adv:'A. Pérez',n:'Prospecto Franquicia Bilbao'}].map(v=>`
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0" class="row-sep">
+          <div><div style="font-size:12px;font-weight:600;color:${DARK}">${v.c}</div><div class="muted">${v.n}</div></div>
+          <div style="text-align:right"><div style="font-size:11px;color:${G};font-weight:600">${v.t}</div><div style="font-size:10px;color:#AAAAAA">${v.adv}</div></div>
+        </div>`).join('')}
+      </div>
+    </div>
+    <div>
+      <div class="card mb12">
+        <div style="font-size:13px;font-weight:700;color:${DARK};margin-bottom:14px">Configurador de Presupuesto</div>
+        <div style="margin-bottom:12px">
+          <div class="muted" style="margin-bottom:6px">Superficie construida (m²)</div>
+          <input type="range" min="60" max="300" value="${m2}" id="m2sl" oninput="updBudget(this.value)">
+          <div style="font-size:22px;font-weight:700;color:${DARK};text-align:center;margin-top:4px" id="m2disp">${m2} m²</div>
+        </div>
+        <div style="margin-bottom:14px">
+          <div class="muted" style="margin-bottom:6px">Nivel de acabados</div>
+          ${[['standard','Estándar','1.650€/m²'],['premium','Premium','1.950€/m²'],['luxury','Luxury','2.200€/m²']].map(([v,l,p])=>`
+          <button id="qbtn_${v}" onclick="setQual('${v}')" style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:8px 10px;margin-bottom:4px;border:${qual===v?`1.5px solid ${G}`:'1px solid var(--border)'};border-radius:7px;background:${qual===v?G+'12':'white'}">
+            <span style="font-size:12px;color:${qual===v?GD:DARK};font-weight:${qual===v?600:400}">${l}</span>
+            <span class="muted">${p}</span>
+          </button>`).join('')}
+        </div>
+        <div style="background:#F5F4F0;border-radius:8px;padding:12px;margin-bottom:14px" id="breakdown">
+          <div class="muted" style="margin-bottom:8px">Desglose estimado</div>
+          <div id="breaklines"></div>
+          <div style="border-top:1px solid var(--border);padding-top:8px;margin-top:4px;display:flex;justify-content:space-between">
+            <span style="font-size:13px;font-weight:700;color:${DARK}">TOTAL ESTIMADO</span>
+            <span style="font-size:15px;font-weight:700;color:${G}" id="totaldisp"></span>
+          </div>
+        </div>
+        <button onclick="alert('Presupuesto PDF generado y enviado por email')" class="btn-primary" style="width:100%;justify-content:center;margin-bottom:6px">Generar Presupuesto PDF</button>
+        <button onclick="alert('Proyecto enviado al Despacho Técnico para inicio de Proyecto Básico')" style="width:100%;padding:8px;background:white;color:${GD};border:1.5px solid ${G};border-radius:8px;font-size:12px;font-weight:500">Enviar al Despacho Técnico →</button>
+      </div>
+      <div class="card">
+        <div class="card-title" style="margin-bottom:10px">Selecciones García Ruiz</div>
+        ${[['Estructura','Acero Magnelis ZM310',true],['Panel envolvente','Thermochip 140mm',true],['Carpintería','PVC 5 cámaras Gris Antracita',true],['Aerotermia','Mitsubishi Ecodan 14kW',true],['MEP','Pendiente selección',false],['Acabados interiores','Pendiente selección',false]].map(([k,v,ok])=>`
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0" class="row-sep">
+          <div><div class="muted">${k}</div><div style="font-size:11px;color:${DARK};font-weight:500">${v}</div></div>
+          <span style="color:${ok?'#2A7A4A':'#AAAAAA'};font-weight:700;font-size:15px">${ok?'✓':'…'}</span>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>`,
+
+  projects:`
+  <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap">
+    <button class="btn-primary" style="padding:5px 12px">Todos (${PX.length})</button>
+    ${SL.map((l,i)=>{const c=PX.filter(p=>p.sN===i).length;return c?`<button style="padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:white;color:#6B6B6B;font-size:11px" onclick="alert('Filtrando por: ${l}')">${l} (${c})</button>`:''}).join('')}
+    <button style="padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:white;color:#6B6B6B;font-size:11px;margin-left:auto" onclick="alert('Exportar a Excel')">↓ Exportar</button>
+  </div>
+  <div style="background:white;border-radius:10px;border:1px solid var(--border);overflow:hidden">
+    <table>
+      <thead><tr>${['Referencia','Cliente','Tipo','Presupuesto','Fase','Progreso','Asesor','Localización',''].map(h=>`<th>${h}</th>`).join('')}</tr></thead>
+      <tbody>${PX.map(p=>`<tr>
+        <td style="font-weight:600;color:${G}">${p.ref}</td>
+        <td style="font-weight:500;color:${DARK}">${p.client}</td>
+        <td style="color:#6B6B6B">${p.m2}m² ${p.type}</td>
+        <td style="font-weight:600;color:${DARK}">${EUR(p.budget)}</td>
+        <td>${chip(p.sN)}</td>
+        <td style="width:100px">${pbar(p.pct,SC[p.sN])}<div style="font-size:10px;color:#8A8A82;margin-top:2px">${p.pct}%</div></td>
+        <td style="color:#6B6B6B">${p.adv}</td>
+        <td style="color:#6B6B6B">${p.loc}</td>
+        <td><button onclick="alert('Abriendo proyecto ${p.ref} — ${p.client}')" style="padding:4px 10px;background:${G}18;color:${GD};border:none;border-radius:5px;font-size:11px;font-weight:500">Ver</button></td>
+      </tr>`).join('')}</tbody>
+    </table>
+  </div>`,
+
+  technical:`
+  <div style="display:grid;grid-template-columns:1fr 290px;gap:12px">
+    <div>
+      <div class="card mb12">
+        <div class="card-title">Cola de Trabajo — Despacho Técnico P2</div>
+        ${[{ref:'VTH-26-002',cl:'Martínez López',task:'Cálculo estructural — Eurocódigo 3 EN1993',pr:'alta',due:'13 May',st:'En Proceso',sc:OR},{ref:'VTH-26-004',cl:'Fernández Díaz',task:'Revisión proyecto básico con cliente',pr:'alta',due:'15 May',st:'Pendiente cita',sc:'#8A8A82'},{ref:'VTH-26-005',cl:'Blanco Herrero',task:'Elaboración proyecto básico 135m²',pr:'media',due:'20 May',st:'Pendiente',sc:'#8A8A82'},{ref:'VTH-26-002',cl:'Martínez López',task:'Solicitud licencia de obra — Ayto. Camargo',pr:'media',due:'18 May',st:'En Revisión',sc:BL},{ref:'VTH-26-003',cl:'Torres Const.',task:'Planos as-built y libro del edificio',pr:'baja',due:'5 Ago',st:'Pendiente',sc:'#8A8A82'}].map((t,i,a)=>`
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:${i<a.length-1?'1px solid #F5F4F0':'none'}">
+          <div class="dot" style="background:${t.pr==='alta'?OR:t.pr==='media'?G:BL}"></div>
+          <div style="flex:1"><div style="font-size:12px;font-weight:600;color:${DARK}">${t.ref} — ${t.cl}</div><div class="muted" style="margin-top:1px">${t.task}</div></div>
+          <div style="text-align:right;flex-shrink:0"><div class="muted">Vence: ${t.due}</div><span class="chip" style="background:${t.sc}22;color:${t.sc}">${t.st}</span></div>
+        </div>`).join('')}
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title" style="font-size:12px">Próxima revisión con cliente</div>
+          <div style="font-size:20px;font-weight:700;color:${GD};margin-bottom:4px">15 Mayo — 10:30</div>
+          <div style="font-size:12px;color:#6B6B6B;margin-bottom:3px">Fernández Díaz · VTH-26-004</div>
+          <div class="muted">Revisión proyecto básico 160m². Sala reuniones P2 — Torre Camargo</div>
+          <button onclick="alert('Recordatorio enviado por app al cliente')" style="margin-top:10px;padding:6px 12px;background:${G}18;color:${GD};border:1px solid ${G}66;border-radius:6px;font-size:11px;font-weight:500">Enviar recordatorio app →</button>
+        </div>
+        <div class="card">
+          <div class="card-title" style="font-size:12px">Agente Normativo IA — CTE</div>
+          <div class="muted mb12">Validación automática 256 reglas CTE</div>
+          ${[['VTH-26-002','256/256 reglas OK','#2A7A4A'],['VTH-26-004','En verificación… 218/256','#C4632A'],['VTH-26-005','Pendiente inicio proyecto',BL]].map(([r,s,c])=>`
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px;align-items:center">
+            <span style="font-size:11px;color:${DARK};font-weight:500">${r}</span>
+            <span style="font-size:10px;color:${c};font-weight:600">${s}</span>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card mb12">
+        <div class="card-title" style="font-size:12px">Sub-departamentos Técnicos</div>
+        ${[['Arquitectura & BIM LOD 400',2,G],['Cálculo Estructural',1,GD],['Proyectos Instalaciones',1,BL],['Documentación Administrativa',2,OR],['Control BIM & Coordinación',1,TL]].map(([l,n,c])=>`
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0" class="row-sep">
+          <div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:2px;background:${c}"></div><span style="font-size:12px;color:${DARK}">${l}</span></div>
+          <span class="chip" style="background:${c}22;color:${c};font-weight:700">${n}</span>
+        </div>`).join('')}
+      </div>
+      <div class="card mb12">
+        <div class="card-title" style="font-size:12px">Estado Licencias de Obra</div>
+        ${[{ref:'VTH-26-002',muni:'Camargo',st:'Presentada 28 Mar',days:44,total:90,c:OR},{ref:'VTH-26-004',muni:'Santander',st:'Preparando docs',days:0,total:90,c:'#8A8A82'}].map(l=>`
+        <div style="margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+            <span style="font-size:11px;font-weight:600;color:${DARK}">${l.ref} — ${l.muni}</span>
+            <span style="font-size:10px;color:${l.c};font-weight:600">${l.st}</span>
+          </div>
+          ${pbar(Math.round(l.days/l.total*100),l.c)}
+          <div class="muted" style="margin-top:2px">${l.days}/${l.total} días · Plazo legal</div>
+        </div>`).join('')}
+        <div style="background:#F5F4F0;border-radius:8px;padding:10px;font-size:11px;color:#6B6B6B;line-height:1.5">
+          🤖 <strong style="color:${G}">Agente Normativo</strong>: verifica 100% reglas locales antes de entrega → reduce respuesta municipal en <strong>30%</strong>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="font-size:12px">Apertura Dossier de Obra</div>
+        <div class="muted mb12">Tras aprobación del proyecto por el cliente</div>
+        ${[['VTH-26-004','Fernández Díaz','Pendiente aprobación',OR,'—'],['VTH-26-002','Martínez López','Dossier abierto',G,'8 May']].map(([r,cl,st,c,dt])=>`
+        <div style="padding:9px;border-radius:8px;border:1px solid ${c}22;background:${c}08;margin-bottom:8px">
+          <div style="display:flex;justify-content:space-between"><span style="font-size:11px;font-weight:600;color:${DARK}">${r} — ${cl}</span><span class="chip" style="background:${c}22;color:${c}">${st}</span></div>
+          ${dt!=='—'?`<div class="muted" style="margin-top:3px">Apertura: ${dt}</div>`:''}
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>`,
+
+  logistics:`
+  <div class="grid4 mb12">
+    ${[{l:'Pedidos Activos',v:'12',c:G},{l:'En Tránsito',v:'4',c:BL},{l:'Entregados (mes)',v:'8',c:'#2A7A4A'},{l:'Pendientes de generar',v:'3',c:OR}].map(k=>`
+    <div class="card-sm"><div class="muted" style="margin-bottom:6px">${k.l}</div><div style="font-size:24px;font-weight:700;color:${k.c}">${k.v}</div></div>`).join('')}
+  </div>
+  <div style="background:white;border-radius:10px;border:1px solid var(--border);overflow:hidden;margin-bottom:12px">
+    <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+      <div class="card-title" style="margin-bottom:0">Órdenes de Material</div>
+      <button onclick="alert('Nueva orden creada')" class="btn-primary" style="font-size:11px;padding:5px 12px">+ Nueva Orden</button>
+    </div>
+    <table><thead><tr>${['Proyecto','Material','Proveedor','Pedido','ETA','Estado'].map(h=>`<th>${h}</th>`).join('')}</tr></thead>
+    <tbody>${[{ref:'VTH-26-003',mat:'Perfiles Acero S350 GD — 8.4 tn',sup:'ArcelorMittal',ord:'15 Abr',eta:'18 May',st:'En Tránsito',c:BL},{ref:'VTH-26-003',mat:'Panel Thermochip 140mm — 340 m²',sup:'Termochip España',ord:'20 Abr',eta:'22 May',st:'Confirmado',c:G},{ref:'VTH-26-004',mat:'Carpintería PVC Antracita — 18 ud',sup:'Rehau Ibérica',ord:'28 Abr',eta:'2 Jun',st:'Pedido',c:GL},{ref:'VTH-26-003',mat:'Aerotermia Mitsubishi Ecodan 14kW',sup:'Mitsubishi Electric',ord:'1 May',eta:'26 May',st:'Confirmado',c:G},{ref:'VTH-26-004',mat:'Membrana Tyvek PLUS — 520 m²',sup:'DuPont',ord:'5 May',eta:'15 May',st:'Entregado',c:'#2A7A4A'},{ref:'VTH-26-005',mat:'Estructura CNC — Fabricación Propia',sup:'Nave Camargo',ord:'—',eta:'—',st:'Pendiente',c:'#8A8A82'}].map(o=>`<tr>
+      <td style="font-weight:600;color:${G}">${o.ref}</td>
+      <td>${o.mat}</td>
+      <td style="color:#6B6B6B">${o.sup}</td>
+      <td style="color:#6B6B6B">${o.ord}</td>
+      <td style="font-weight:500">${o.eta}</td>
+      <td><span class="chip" style="background:${o.c}22;color:${o.c}">${o.st}</span></td>
+    </tr>`).join('')}</tbody></table>
+  </div>
+  <div class="card">
+    <div class="card-title">Cronograma JIT — VTH-26-003 Torres Const. · Coordinación Logística-Montaje</div>
+    <div style="display:flex;align-items:flex-end;gap:6px">
+      ${[{w:'Sem 8',l:'Cimentación',done:true},{w:'Sem 9',l:'Entrega acero',done:true},{w:'Sem 10',l:'Montaje estr.',done:false,active:true},{w:'Sem 11',l:'Thermochip',done:false},{w:'Sem 12',l:'Envolvente',done:false},{w:'Sem 14',l:'Carpintería',done:false},{w:'Sem 18',l:'MEP',done:false},{w:'Sem 22',l:'Entrega + Certif.',done:false}].map(it=>`
+      <div style="flex:1;text-align:center">
+        <div style="font-size:9px;color:#8A8A82;margin-bottom:4px;line-height:1.2">${it.l}</div>
+        <div style="height:34px;border-radius:5px 5px 0 0;margin:0 1px;background:${it.done?G:it.active?OR:'#E8E7E2'};display:flex;align-items:center;justify-content:center">
+          <span style="color:${it.done||it.active?'white':'transparent'};font-size:10px;font-weight:700">${it.done?'✓':it.active?'●':''}</span>
+        </div>
+        <div style="font-size:9px;color:${it.done?G:it.active?OR:'#AAAAAA'};margin-top:3px;font-weight:${it.active?700:400}">${it.w}</div>
+      </div>`).join('')}
+    </div>
+    <div class="muted" style="margin-top:10px;text-align:center">Sistema JIT: entregas coordinadas con hitos de montaje · Sin stock muerto en obra · Monitorización LME acero en tiempo real</div>
+  </div>`,
+
+  construction:`
+  <div style="display:grid;grid-template-columns:1fr 310px;gap:12px">
+    <div>
+      <div class="card mb12">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+          <div><div style="font-size:13px;font-weight:700;color:${DARK}">Torres Const. — VTH-26-003</div><div class="muted">Dúplex 175m² · Torrelavega · Jefe de obra: A. Pérez</div></div>
+          <div style="text-align:right"><div style="font-size:24px;font-weight:700;color:${G}">62%</div><div class="muted">Semana 10/22</div></div>
+        </div>
+        ${pbar(62,G,8)}
+      </div>
+      <div class="card">
+        <div class="card-title">Hitos de Obra — Validación y Fotografía</div>
+        ${[{id:'H1',l:'Replanteo y Cimentación',done:true,dt:'15 Ene',ph:6},{id:'H2',l:'Estructura metálica montada',done:true,dt:'28 Ene',ph:12},{id:'H3',l:'Cubierta y estanqueidad',done:true,dt:'10 Feb',ph:8},{id:'H4',l:'Envolvente Bio-Skin finalizada',done:true,dt:'5 Mar',ph:9},{id:'H5',l:'Carpintería exterior instalada',done:true,dt:'22 Mar',ph:11},{id:'H6',l:'Instalaciones MEP rough-in',done:false,dt:'Est. 20 May',active:true},{id:'H7',l:'Trasdosado y yeso',done:false,dt:'Est. 3 Jun'},{id:'H8',l:'Acabados interiores',done:false,dt:'Est. 25 Jun'},{id:'H9',l:'Instalaciones definitivas',done:false,dt:'Est. 10 Jul'},{id:'H10',l:'Entrega Llaves + Certificación ViTAH',done:false,dt:'Est. 5 Ago'}].map((m,i)=>`
+        <div class="hito-row" style="background:${m.active?OR+'08':'transparent'};border:1px solid ${m.active?OR+'22':'transparent'}">
+          <div class="hito-circle" style="background:${m.done?G:m.active?OR:'#F0EFE8'};color:${m.done||m.active?'white':'#AAAAAA'}">
+            ${m.done?'✓':m.id.replace('H','')}
+          </div>
+          <div style="flex:1;display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-size:12px;font-weight:${m.active?600:400};color:${m.done?'#2A7A4A':m.active?OR:DARK}">${m.l}</div>
+              ${m.ph?`<span class="muted">📷 ${m.ph} fotos · Validado cliente</span>`:''}
+            </div>
+            <div style="text-align:right;flex-shrink:0;margin-left:10px"><div class="muted">${m.dt}</div>${m.active?`<span style="font-size:10px;color:${OR};font-weight:600">● En curso</span>`:''}</div>
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>
+    <div>
+      <div class="card mb12">
+        <div class="card-title" style="font-size:12px">Obras Activas</div>
+        ${[{cl:'Torres Const.',ref:'VTH-26-003',pct:62,c:G},{cl:'Alonso García',ref:'VTH-25-052',pct:85,c:GD},{cl:'García Ruiz (inicio)',ref:'VTH-26-001',pct:0,c:'#8A8A82',note:'Pendiente licencia'}].map(p=>`
+        <div style="margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:12px;font-weight:600;color:${DARK}">${p.cl}</span><span style="font-size:11px;color:${p.c};font-weight:600">${p.pct}%</span></div>
+          ${pbar(p.pct,p.c)}
+          <div class="muted" style="margin-top:2px">${p.ref}${p.note?' — '+p.note:''}</div>
+        </div>`).join('')}
+      </div>
+      <div class="card mb12">
+        <div class="card-title" style="font-size:12px">Fotografías de Obra — H5 Carpintería</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
+          ${[1,2,3,4].map(n=>`
+          <button onclick="alert('${n<=2?'Abriendo foto '+n:'Subir nueva fotografía'}')" style="height:65px;border-radius:8px;background:${n<=2?G+'12':'#F5F4F0'};border:${n<=2?`1px solid ${G}44`:'1px dashed #D4D3CE'};display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px">
+            <span style="font-size:20px">${n<=2?'🖼':'📷'}</span>
+            <span style="font-size:9px;color:${n<=2?G:'#AAAAAA'};font-weight:${n<=2?600:400}">${n<=2?'Ver foto':'Subir foto'}</span>
+          </button>`).join('')}
+        </div>
+        <button onclick="alert('Galería completa: 46 fotografías')" style="width:100%;padding:7px;background:${G}18;color:${GD};border:1px solid ${G}66;border-radius:7px;font-size:11px;font-weight:500">Ver galería completa (11 fotos)</button>
+      </div>
+      <div class="card">
+        <div class="card-title" style="font-size:12px">Control de Calidad</div>
+        ${[['Replanteo OK','Tolerancia ±5mm','✓',true],['Estructura plomada','0.2% desviación max','✓',true],['Blower Door Test','0.6 ACH@50Pa ✓','✓',true],['Thermochip sellado','Sin puentes térmicos','✓',true],['MEP rough-in','Pendiente hito H6','…',false]].map(([t,v,s,ok])=>`
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0" class="row-sep">
+          <div><div style="font-size:11px;font-weight:500;color:${DARK}">${t}</div><div class="muted">${v}</div></div>
+          <span style="color:${ok?'#2A7A4A':'#AAAAAA'};font-weight:700;font-size:15px">${s}</span>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>`,
+
+  'client-app':`
+  <div style="display:grid;grid-template-columns:1fr 240px;gap:12px">
+    <div>
+      <div class="card">
+        <div style="font-size:13px;font-weight:700;color:${DARK};margin-bottom:4px">App ViTAH Cliente — Experiencia del propietario</div>
+        <div class="muted mb12">Sincronizada en tiempo real con ViTAH OS · Simulación para Torres Const. (VTH-26-003)</div>
+        <div style="display:flex;gap:8px;margin-bottom:16px">
+          ${[['overview','Vista General'],['milestones','Hitos'],['docs','Documentación']].map(([t,l])=>`<button class="tab-btn ${appTab===t?'active':''}" onclick="setAppTab('${t}')">${l}</button>`).join('')}
+        </div>
+        ${appTab==='overview'?`
+          <div style="background:#F5F4F0;border-radius:10px;padding:16px;margin-bottom:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+              <div><div style="font-size:14px;font-weight:700;color:${DARK}">Mi Vivienda ViTAH</div><div class="muted">Dúplex 175m² · Torrelavega</div></div>
+              <div style="background:${G};border-radius:9px;padding:8px 12px;text-align:center"><div style="font-size:20px;font-weight:800;color:white">62%</div><div style="font-size:9px;color:rgba(255,255,255,.8)">completado</div></div>
+            </div>
+            ${pbar(62,G,8)}
+            <div class="grid3" style="gap:8px;margin-top:12px">
+              ${[['Semana actual','10 / 22'],['Hito activo','MEP · H6'],['Entrega est.','5 Ago 26']].map(([l,v])=>`
+              <div style="background:white;border-radius:7px;padding:10px;text-align:center"><div class="muted">${l}</div><div style="font-size:13px;font-weight:600;color:${DARK};margin-top:3px">${v}</div></div>`).join('')}
+            </div>
+          </div>
+          <div class="grid2">
+            <div class="card">
+              <div style="font-size:11px;font-weight:600;color:${DARK};margin-bottom:8px">Últimas actualizaciones</div>
+              ${[{t:'H5 — Carpintería instalada',d:'8 May',n:true},{t:'11 fotos semana 9 disponibles',d:'4 May',n:false},{t:'Control Blower Door: PASS ✓',d:'2 May',n:false}].map(u=>`
+              <div style="margin-bottom:7px"><div style="display:flex;justify-content:space-between;align-items:flex-start">
+                <span style="font-size:11px;color:${DARK};font-weight:${u.n?600:400}">${u.t}</span>
+                ${u.n?`<span class="chip badge-green" style="font-size:9px">NEW</span>`:''}
+              </div><div style="font-size:10px;color:#AAAAAA">${u.d}</div></div>`).join('')}
+            </div>
+            <div class="card">
+              <div style="font-size:11px;font-weight:600;color:${DARK};margin-bottom:8px">Equipo del proyecto</div>
+              ${[['Asesor Comercial','A. Pérez','611 234 567'],['Arquitecto','R. Ibáñez','622 345 678'],['Jefe de Obra','P. García','633 456 789']].map(([r,n,t])=>`
+              <div style="margin-bottom:7px"><div class="muted">${r}</div><div style="font-size:11px;font-weight:500;color:${DARK}">${n}</div><div style="font-size:10px;color:${G}">${t}</div></div>`).join('')}
+            </div>
+          </div>
+        `:appTab==='milestones'?`
+          <div style="max-height:300px;overflow-y:auto">
+            ${[{id:'H1',l:'Replanteo y Cimentación',d:'15 Ene',done:true,ph:6},{id:'H2',l:'Estructura metálica',d:'28 Ene',done:true,ph:12},{id:'H3',l:'Cubierta y estanqueidad',d:'10 Feb',done:true,ph:8},{id:'H4',l:'Envolvente Bio-Skin',d:'5 Mar',done:true,ph:9},{id:'H5',l:'Carpintería exterior',d:'22 Mar',done:true,ph:11},{id:'H6',l:'Instalaciones MEP',d:'Est. 20 May',done:false,active:true},{id:'H7',l:'Trasdosado interior',d:'Est. 3 Jun',done:false},{id:'H8',l:'Acabados interiores',d:'Est. 25 Jun',done:false},{id:'H9',l:'Instalaciones definitivas',d:'Est. 10 Jul',done:false},{id:'H10',l:'Entrega + Certificación ViTAH',d:'Est. 5 Ago',done:false}].map((m,i)=>`
+            <div style="display:flex;gap:10px;padding:9px 0;border-bottom:${i<9?'1px solid #F5F4F0':'none'}">
+              <div class="hito-circle" style="background:${m.done?G:m.active?OR:'#F0EFE8'};color:${m.done||m.active?'white':'#AAAAAA'};width:28px;height:28px;font-size:10px">
+                ${m.done?'✓':m.id.replace('H','')}
+              </div>
+              <div style="flex:1"><div style="font-size:12px;font-weight:${m.active?600:400};color:${m.done?'#2A7A4A':m.active?OR:DARK}">${m.l}</div>
+              <div style="display:flex;justify-content:space-between;margin-top:2px">
+                <span class="muted">${m.d}</span>
+                ${m.ph?`<span style="font-size:10px;color:${G}">📷 ${m.ph} fotos</span>`:''}
+              </div></div>
+            </div>`).join('')}
+          </div>
+        `:`
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+            ${[['Proyecto Básico',4,G],['Planos de Obra',12,GD],['Licencias',3,BL],['Control Calidad',7,TL],['Fotografías',46,OR],['Certificaciones',2,'#1E6B3A'],['Garantías',5,'#8B5E3C'],['Libro Edificio',1,DARK],['Seguros',3,'#6B6B6B']].map(([f,n,c])=>`
+            <button onclick="alert('Carpeta: ${f} — ${n} documentos')" style="padding:12px;border-radius:9px;border:1px solid var(--border);background:white;cursor:pointer;text-align:center">
+              <div style="font-size:22px;margin-bottom:4px">📁</div>
+              <div style="font-size:11px;font-weight:600;color:${DARK};margin-bottom:2px">${f}</div>
+              <div style="font-size:10px;color:${c};font-weight:600">${n} docs</div>
+            </button>`).join('')}
+          </div>
+        `}
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center">
+      <div class="muted" style="margin-bottom:10px;text-align:center">App ViTAH iOS & Android</div>
+      <div class="mobile-shell">
+        <div class="mobile-header">
+          <div style="font-size:15px;font-weight:800;color:white;letter-spacing:1px">ViTAH</div>
+          <div style="font-size:9px;color:rgba(255,255,255,.8)">Seguimiento de Obra</div>
+        </div>
+        <div class="mobile-body">
+          <div style="background:white;border-radius:10px;padding:10px;margin-bottom:7px">
+            <div style="font-size:11px;font-weight:700;color:${DARK};margin-bottom:2px">Mi Vivienda</div>
+            <div class="muted" style="font-size:9px;margin-bottom:6px">VTH-26-003 · Torrelavega</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+              <span style="font-size:10px;color:#6B6B6B">Progreso</span><span style="font-size:14px;font-weight:800;color:${G}">62%</span>
+            </div>${pbar(62,G,5)}
+          </div>
+          <div style="background:white;border-radius:10px;padding:10px;margin-bottom:7px">
+            <div style="font-size:10px;font-weight:700;color:${DARK};margin-bottom:7px">Hitos</div>
+            ${[['H4','Bio-Skin',true,false],['H5','Carpintería',true,false],['H6','MEP',false,true],['H7','Trasdosado',false,false]].map(([h,l,done,act])=>`
+            <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px">
+              <div style="width:18px;height:18px;border-radius:50%;background:${done?G:act?OR:'#E8E7E2'};display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <span style="color:${done||act?'white':'#AAAAAA'};font-size:${done?9:8}px;font-weight:700">${done?'✓':h}</span>
+              </div>
+              <span style="font-size:10px;color:${done?'#2A7A4A':act?OR:'#8A8A82'};font-weight:${act?600:400}">${l}</span>
+              ${act?`<span style="font-size:8px;color:white;background:${OR};padding:1px 5px;border-radius:3px;font-weight:700;margin-left:auto">HOY</span>`:''}
+            </div>`).join('')}
+          </div>
+          <div style="background:white;border-radius:10px;padding:10px">
+            <div style="font-size:10px;font-weight:700;color:${DARK};margin-bottom:6px">Notificaciones</div>
+            <div style="font-size:9px;line-height:1.5;background:${G}12;border-radius:7px;padding:7px;border-left:3px solid ${G};margin-bottom:5px">
+              <strong style="color:${G}">H5 completado ✓</strong><br>Carpintería instalada. 11 fotos disponibles en tu repositorio.
+            </div>
+            <div style="font-size:9px;line-height:1.5;background:${OR}12;border-radius:7px;padding:7px;border-left:3px solid ${OR}">
+              <strong style="color:${OR}">Acción requerida</strong><br>Firma digital acta hito H5 pendiente.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`,
+
+  finance:`
+  <div class="grid4 mb12">
+    ${[{l:'Facturación YTD',v:'524K€',sub:'Objetivo: 900K€',c:G},{l:'Margen Bruto',v:'28.4%',sub:'Objetivo: 28% ✓',c:'#2A7A4A'},{l:'Pendiente Cobro',v:'78K€',sub:'6 facturas activas',c:OR},{l:'Coste Materiales',v:'384K€',sub:'YTD · Protegido LME',c:BL}].map(k=>`
+    <div class="card-sm"><div class="muted" style="margin-bottom:6px">${k.l}</div><div style="font-size:22px;font-weight:700;color:${k.c}">${k.v}</div><div class="muted" style="margin-top:3px">${k.sub}</div></div>`).join('')}
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">Facturación vs Costes 2026 (K€)</div>
+      <div class="bar-chart">
+        ${[{m:'Ene',rev:85,cost:58},{m:'Feb',rev:92,cost:63},{m:'Mar',rev:108,cost:74},{m:'Abr',rev:115,cost:80},{m:'May',rev:124,cost:85}].map(d=>`
+        <div class="bar-group">
+          <div class="bar-cols">
+            <div class="bar-rev" style="height:${Math.round(d.rev/130*100)}px"></div>
+            <div class="bar-cost" style="height:${Math.round(d.cost/130*100)}px"></div>
+          </div>
+          <div class="bar-label">${d.m}</div>
+        </div>`).join('')}
+      </div>
+      <div style="display:flex;gap:16px;margin-top:12px;font-size:11px;color:#6B6B6B">
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${G};margin-right:4px;vertical-align:middle"></span>Facturación</span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${GL}66;margin-right:4px;vertical-align:middle"></span>Costes</span>
+      </div>
+      <div style="margin-top:14px;padding:10px;background:#F5F4F0;border-radius:8px">
+        ${[['Margen acumulado YTD','140K€',G],['Proyección anual margen','340K€',GD],['Fondo contingencia CAPEX','50K€',OR]].map(([l,v,c])=>`
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+          <span class="muted">${l}</span><span style="font-size:12px;font-weight:700;color:${c}">${v}</span>
+        </div>`).join('')}
+      </div>
+    </div>
+    <div>
+      <div class="card mb12">
+        <div class="card-title">Facturas Pendientes de Cobro</div>
+        ${[{cl:'Torres Const.',ref:'VTH-26-003',amt:'42.500€',due:'15 May',st:'Vence pronto',c:OR},{cl:'Martínez López',ref:'VTH-26-002',amt:'18.000€',due:'28 May',st:'Emitida',c:G},{cl:'Fernández Díaz',ref:'VTH-26-004',amt:'17.500€',due:'5 Jun',st:'Emitida',c:G}].map(f=>`
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0" class="row-sep">
+          <div><div style="font-size:11px;font-weight:600;color:${DARK}">${f.cl}</div><div class="muted">${f.ref} · Vence ${f.due}</div></div>
+          <div style="text-align:right"><div style="font-size:13px;font-weight:700;color:${DARK}">${f.amt}</div><span class="chip" style="background:${f.c}22;color:${f.c}">${f.st}</span></div>
+        </div>`).join('')}
+        <div style="margin-top:12px;padding:10px;background:#F5F4F0;border-radius:8px;display:flex;justify-content:space-between">
+          <span style="font-size:11px;color:#6B6B6B">Total pendiente cobro</span>
+          <span style="font-size:13px;font-weight:700;color:${DARK}">78.000€</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="font-size:12px">Control de Costes por Proyecto</div>
+        ${[{cl:'Torres 175m²',budget:340000,spent:211000},{cl:'Alonso 120m²',budget:235000,spent:196000},{cl:'García 140m²',budget:285000,spent:34000}].map(p=>`
+        <div style="margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+            <span style="font-size:11px;font-weight:500;color:${DARK}">${p.cl}</span>
+            <span class="muted">${EUR(p.spent)} / ${EUR(p.budget)}</span>
+          </div>
+          ${pbar(Math.round(p.spent/p.budget*100),p.spent/p.budget>0.85?OR:G)}
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>`,
+
+  certifications:`
+  <div class="grid3 mb12">
+    ${[{l:'Certif. Emitidas 2026',v:'23',sub:'Objetivo: 40 anuales',c:G},{l:'Pendientes aprobación',v:'3',sub:'Obras en curso',c:OR},{l:'Gen. automática activa',v:'1',sub:'Fin de obra detectado',c:BL}].map(k=>`
+    <div class="card-sm"><div class="muted" style="margin-bottom:6px">${k.l}</div><div style="font-size:24px;font-weight:700;color:${k.c}">${k.v}</div><div class="muted" style="margin-top:3px">${k.sub}</div></div>`).join('')}
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">Certificaciones ViTAH Recientes</div>
+      ${[{ref:'VTH-25-047',cl:'Rodríguez Blanco',dt:'15 Oct 25',bl:'0.48 ACH',nzeb:true,m2:120},{ref:'VTH-25-041',cl:'Pérez Hermanos',dt:'28 Sep 25',bl:'0.52 ACH',nzeb:true,m2:98},{ref:'VTH-25-038',cl:'Alonso García',dt:'10 Sep 25',bl:'0.61 ACH',nzeb:false,m2:145}].map(c=>`
+      <div style="border-radius:9px;border:1px solid var(--border);padding:12px;margin-bottom:10px;background:#FAFAF8">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+          <div><div style="font-size:12px;font-weight:700;color:${DARK}">${c.cl} — ${c.m2}m²</div><div class="muted">${c.ref} · Emitida ${c.dt}</div></div>
+          <div style="width:38px;height:38px;border-radius:50%;background:${G};display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🛡</div>
+        </div>
+        <div style="display:flex;gap:6px">
+          <span class="chip" style="background:${BL}22;color:${BL}">Blower Door ${c.bl}</span>
+          ${c.nzeb?`<span class="chip badge-green">nZEB Clase A+ ✓</span>`:'<span class="chip badge-muted">Clase B</span>'}
+          <span class="chip badge-green">Garantía 50 años</span>
+        </div>
+      </div>`).join('')}
+      <div style="padding:10px;background:${G}08;border-radius:8px;border-left:3px solid ${G};font-size:11px;color:#6B6B6B;line-height:1.6">
+        🤖 <strong style="color:${G}">Detección automática de fin de obra:</strong> ViTAH OS detecta la validación del hito H10 y genera automáticamente el certificado PDF, lo registra en el Libro del Edificio digital y notifica al cliente vía app.
+      </div>
+    </div>
+    <div class="card">
+      <div style="font-size:13px;font-weight:600;color:${DARK};margin-bottom:6px">Certificado ViTAH — Preview</div>
+      <div class="muted mb12">Generación automática al validar fin de obra · Enviado automáticamente al cliente</div>
+      <div class="cert-preview">
+        <div style="font-size:28px;font-weight:900;color:${G};letter-spacing:2px;margin-bottom:2px">ViTAH</div>
+        <div class="muted" style="font-size:8px;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px">Certificado de Calidad Constructiva</div>
+        <div style="width:56px;height:56px;border-radius:50%;background:${G};margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:28px">🛡</div>
+        <div style="font-size:14px;font-weight:700;color:${DARK};margin-bottom:3px">RODRÍGUEZ BLANCO</div>
+        <div class="muted" style="margin-bottom:14px">Vivienda Unifamiliar 120m² · Castro Urdiales · Cantabria</div>
+        <div class="grid2" style="gap:6px;margin-bottom:12px;text-align:left">
+          ${[['Blower Door','0.48 ACH@50Pa'],['Energía','nZEB Clase A+'],['Estructura','Garantía 50 años'],['Estanqueidad','Passivhaus EnerPHit'],['Acústica','Clase A DB-HR'],['Libro Edificio','Digital · QR']].map(([k,v])=>`
+          <div style="background:white;border-radius:7px;padding:7px">
+            <div class="muted" style="font-size:9px">${k}</div>
+            <div style="font-size:10px;font-weight:700;color:${GD}">${v}</div>
+          </div>`).join('')}
+        </div>
+        <div class="muted" style="font-size:9px;font-style:italic">Emitido digitalmente · 15 Oct 2025 · ViTAH OS v2.4</div>
+      </div>
+      <button onclick="alert('Descargando Certificado ViTAH PDF')" class="btn-primary" style="width:100%;justify-content:center;margin-top:12px">⬇ Descargar Certificado PDF</button>
+    </div>
+  </div>`
+};}
+
+function updBudget(val){
+  m2=+val;
+  const el=document.getElementById('m2disp');if(el)el.textContent=val+' m²';
+  rebuildBreakdown();
+}
+function setQual(q){
+  qual=q;
+  document.querySelectorAll('[id^="qbtn_"]').forEach(b=>{
+    const v=b.id.replace('qbtn_','');
+    b.style.border=v===q?`1.5px solid ${G}`:'1px solid var(--border)';
+    b.style.background=v===q?`${G}12`:'white';
+    b.querySelector('span').style.fontWeight=v===q?600:400;
+    b.querySelector('span').style.color=v===q?GD:DARK;
+  });
+  rebuildBreakdown();
+}
+function rebuildBreakdown(){
+  const p=m2*(qual==='premium'?1950:qual==='standard'?1650:2200);
+  const bl=document.getElementById('breaklines');
+  if(bl)bl.innerHTML=[['Estructura ViTAH Core',0.30],['Envolvente Bio-Skin',0.18],['Instalaciones MEP',0.22],['Acabados interiores',0.20],['Dirección y Proyecto',0.10]].map(([k,r])=>`<div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:11px;color:#6B6B6B">${k}</span><span style="font-size:11px;font-weight:500;color:${DARK}">${EUR(Math.round(p*r))}</span></div>`).join('');
+  const t=document.getElementById('totaldisp');if(t)t.textContent=EUR(p);
+}
+function setAppTab(tab){
+  appTab=tab;
+  document.getElementById('content').innerHTML=views()['client-app'];
+  rebuildBreakdown();
+}
+
+const TITLES={dashboard:'Dashboard',showroom:'Showroom — Configurador & Sesiones',projects:'Proyectos — Pipeline Completo',technical:'Departamento Técnico',logistics:'Logística — Pedidos & Cronograma',construction:'Montaje / Obra — Seguimiento',['client-app']:'App Cliente — Seguimiento de Obra',finance:'Finanzas — Gestión & Facturación',certifications:'Certificaciones ViTAH'};
+
+function setView(v,btn){
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  document.getElementById('view-title').textContent=TITLES[v]||v;
+  document.getElementById('content').innerHTML=views()[v]||'';
+  if(v==='showroom')rebuildBreakdown();
+}
+
+// Init
+document.getElementById('content').innerHTML=views()['dashboard'];
+</script>
+</body>
+</html>

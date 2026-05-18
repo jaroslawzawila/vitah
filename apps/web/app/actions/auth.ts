@@ -1,7 +1,7 @@
 "use server";
 
 import { signIn } from "../../auth";
-import { AuthError } from "next-auth";
+import { AuthError } from "@repo/auth";
 
 export async function loginAction(
   _prevState: { error: string } | null,
