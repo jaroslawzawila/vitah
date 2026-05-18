@@ -15,6 +15,7 @@ const NAV_ITEMS = [
   { key: "clientApp", href: "/dashboard/client-app", icon: "\u25A3" },
   { key: "finance", href: "/dashboard/finance", icon: "\u25C9" },
   { key: "certifications", href: "/dashboard/certifications", icon: "\u25C6" },
+  { key: "users", href: "/dashboard/users", icon: "\u25D0" },
 ] as const;
 
 export default function Sidebar() {

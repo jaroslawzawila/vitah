@@ -24,7 +24,8 @@
     "construction": "Montaje / Obra",
     "clientApp": "App Cliente",
     "finance": "Finanzas",
-    "certifications": "Certificaciones"
+    "certifications": "Certificaciones",
+    "users": "Usuarios"
   },
   "topbar": {
     "titles": {
@@ -36,7 +37,8 @@
       "construction": "Montaje / Obra — Seguimiento",
       "clientApp": "App Cliente — Seguimiento de Obra",
       "finance": "Finanzas — Gestión & Facturación",
-      "certifications": "Certificaciones ViTAH"
+      "certifications": "Certificaciones ViTAH",
+      "users": "Gestión de Usuarios"
     },
     "synced": "sincronizados",
     "newProject": "Nuevo Proyecto",
@@ -389,6 +391,54 @@
       },
       "issuedDigitally": "Emitido digitalmente",
       "download": "Descargar Certificado PDF"
+    }
+  },
+  "usersPage": {
+    "title": "Usuarios del Sistema",
+    "inviteUser": "Invitar Usuario",
+    "table": {
+      "name": "Nombre",
+      "email": "Correo electrónico",
+      "role": "Rol",
+      "status": "Estado",
+      "created": "Fecha alta",
+      "actions": "Acciones"
+    },
+    "roles": {
+      "admin": "Administrador",
+      "manager": "Gestor",
+      "viewer": "Visor"
+    },
+    "statuses": {
+      "active": "Activo",
+      "inactive": "Inactivo"
+    },
+    "actions": {
+      "changeRole": "Cambiar rol",
+      "deactivate": "Desactivar",
+      "activate": "Activar"
+    },
+    "inviteForm": {
+      "title": "Nuevo Usuario",
+      "nameLabel": "Nombre completo",
+      "namePlaceholder": "Nombre y apellidos",
+      "emailLabel": "Correo electrónico",
+      "emailPlaceholder": "usuario@vitah.es",
+      "passwordLabel": "Contraseña temporal",
+      "passwordPlaceholder": "Mínimo 8 caracteres",
+      "roleLabel": "Rol",
+      "submit": "Crear usuario",
+      "submitting": "Creando…",
+      "cancel": "Cancelar"
+    },
+    "errors": {
+      "missing_fields": "Todos los campos son obligatorios.",
+      "email_exists": "Ya existe un usuario con este correo.",
+      "password_too_short": "La contraseña debe tener al menos 8 caracteres.",
+      "generic": "Error al procesar la solicitud."
+    },
+    "success": {
+      "created": "Usuario creado correctamente."
     }
   }
 }

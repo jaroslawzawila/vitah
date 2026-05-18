@@ -13,6 +13,8 @@
   "dependencies": {
     "@base-ui/react": "^1.4.1",
     "@repo/auth": "workspace:*",
+    "@repo/db": "workspace:*",
+    "bcryptjs": "^2.4.3",
     "@repo/tailwind-config": "workspace:*",
     "@repo/ui": "workspace:*",
     "@tailwindcss/postcss": "^4.3.0",
@@ -31,6 +33,7 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^22.15.3",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",

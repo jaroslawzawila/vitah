@@ -24,7 +24,8 @@
     "construction": "Assembly / Site",
     "clientApp": "Client App",
     "finance": "Finance",
-    "certifications": "Certifications"
+    "certifications": "Certifications",
+    "users": "Users"
   },
   "topbar": {
     "titles": {
@@ -36,7 +37,8 @@
       "construction": "Assembly / Site — Tracking",
       "clientApp": "Client App — Site Tracking",
       "finance": "Finance — Management & Billing",
-      "certifications": "ViTAH Certifications"
+      "certifications": "ViTAH Certifications",
+      "users": "User Management"
     },
     "synced": "synced",
     "newProject": "New Project",
@@ -389,6 +391,54 @@
       },
       "issuedDigitally": "Digitally issued",
       "download": "Download Certificate PDF"
+    }
+  },
+  "usersPage": {
+    "title": "System Users",
+    "inviteUser": "Invite User",
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "status": "Status",
+      "created": "Created",
+      "actions": "Actions"
+    },
+    "roles": {
+      "admin": "Administrator",
+      "manager": "Manager",
+      "viewer": "Viewer"
+    },
+    "statuses": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "actions": {
+      "changeRole": "Change role",
+      "deactivate": "Deactivate",
+      "activate": "Activate"
+    },
+    "inviteForm": {
+      "title": "New User",
+      "nameLabel": "Full name",
+      "namePlaceholder": "First and last name",
+      "emailLabel": "Email",
+      "emailPlaceholder": "user@vitah.es",
+      "passwordLabel": "Temporary password",
+      "passwordPlaceholder": "Minimum 8 characters",
+      "roleLabel": "Role",
+      "submit": "Create user",
+      "submitting": "Creating…",
+      "cancel": "Cancel"
+    },
+    "errors": {
+      "missing_fields": "All fields are required.",
+      "email_exists": "A user with this email already exists.",
+      "password_too_short": "Password must be at least 8 characters.",
+      "generic": "Error processing the request."
+    },
+    "success": {
+      "created": "User created successfully."
     }
   }
 }

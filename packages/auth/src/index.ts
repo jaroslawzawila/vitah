@@ -1,5 +1,8 @@
+import "./types";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { compare } from "bcryptjs";
+import { db, users, tenants, eq } from "@repo/db";
 
 export { AuthError } from "next-auth";
 
@@ -16,14 +19,31 @@ const result = NextAuth({
 
         if (!email || !password) return null;
 
-        if (
-          email === process.env.DEMO_USER_EMAIL &&
-          password === process.env.DEMO_USER_PASSWORD
-        ) {
-          return { id: "1", email, name: "ViTAH Admin" };
-        }
+        // Find user by email
+        const user = await db.query.users.findFirst({
+          where: eq(users.email, email),
+        });
 
-        return null;
+        if (!user || !user.passwordHash || !user.active) return null;
+
+        // Verify tenant is active
+        const tenant = await db.query.tenants.findFirst({
+          where: eq(tenants.id, user.tenantId),
+        });
+
+        if (!tenant || !tenant.active) return null;
+
+        // Verify password
+        const valid = await compare(password, user.passwordHash);
+        if (!valid) return null;
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          role: user.role,
+          tenantId: user.tenantId,
+        };
       },
     }),
   ],
@@ -32,6 +52,21 @@ const result = NextAuth({
     signIn: "/",
   },
   callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.role = user.role;
+        token.tenantId = user.tenantId;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.sub!;
+        session.user.role = token.role;
+        session.user.tenantId = token.tenantId;
+      }
+      return session;
+    },
     authorized({ auth: session, request: { nextUrl } }) {
       const isAuthenticated = !!session?.user;
       const isLoginPage = nextUrl.pathname === "/";

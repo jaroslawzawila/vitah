@@ -17,7 +17,8 @@ Turborepo monorepo with pnpm@9.0.0 workspaces.
 
 | Package | Name | Purpose |
 |---------|------|---------|
-| `packages/auth` | `@repo/auth` | NextAuth.js v5 config (Credentials provider, JWT sessions) |
+| `packages/auth` | `@repo/auth` | NextAuth.js v5 config (Credentials provider, JWT sessions, Drizzle adapter) |
+| `packages/db` | `@repo/db` | Drizzle ORM schema, database client, seed script (Vercel Postgres) |
 | `packages/shared` | `@repo/ui` | React UI components (exports `./src/*.tsx`) |
 | `packages/tailwind-config` | `@repo/tailwind-config` | Shared Tailwind v4 theme with ViTAH brand tokens |
 | `packages/eslint-config` | `@repo/eslint-config` | ESLint configs (`./base`, `./next-js`, `./react-internal`) |
@@ -33,13 +34,18 @@ pnpm exec turbo build --filter=web   # Build web only
 pnpm exec turbo lint                 # Lint all
 pnpm exec turbo check-types          # Type check all
 pnpm run format                      # Prettier format all
+pnpm db:push                         # Push schema to database
+pnpm db:generate                     # Generate migration files
+pnpm db:migrate                      # Apply migrations
+pnpm db:seed                         # Seed initial tenant + admin user
 ```
 
 ## Tech Stack
 
 - **Next.js 16.2.0** (App Router, Turbopack)
 - **React 19.2.0** / TypeScript 5.9.2
-- **NextAuth.js 5.0.0-beta.31** — Credentials provider, JWT sessions
+- **NextAuth.js 5.0.0-beta.31** — Credentials provider, JWT sessions, Drizzle adapter
+- **Drizzle ORM 0.35** + **Vercel Postgres** — database layer with multi-tenant schema
 - **next-intl 4.12.0** — i18n (Spanish default, English)
 - **Tailwind CSS 4.3.0** + **shadcn/ui** — utility-first CSS with component library
 - **CSS Modules** — used alongside Tailwind for complex layout styles
@@ -91,13 +97,32 @@ When adding any API route, server action, or backend logic:
 - All user-facing text must use `useTranslations()` — never hardcode strings
 - Add keys to both `es.json` and `en.json` when adding new text
 
+### Multi-Tenancy
+
+- **Tenant** = an organization/company using the ViTAH platform
+- All data tables have a `tenantId` foreign key — queries always filter by tenant
+- Users belong to exactly one tenant. No cross-tenant access.
+- `tenantId` is stored in the JWT token and session, set at login time
+- Server actions extract `tenantId` from session and scope all queries to that tenant
+- User emails are unique per tenant (composite unique), not globally
+
 ### Auth
 
-- Config lives in `packages/auth/src/index.ts`
-- Phase 1: demo credentials via `.env.local` (`DEMO_USER_EMAIL`, `DEMO_USER_PASSWORD`)
-- `NEXTAUTH_SECRET` required in each app's `.env.local`
+- Config lives in `packages/auth/src/index.ts` with Drizzle adapter
+- Credentials provider: authenticates against `users` table with bcrypt password hashing
+- JWT sessions include `role` and `tenantId` fields
+- `NEXTAUTH_SECRET` + `POSTGRES_URL` required in each app's `.env.local`
 - Login page is `/`, authenticated users redirect to `/dashboard`
 - Middleware protects all routes except `/`, `/api/auth/*`, and static assets
+- User roles: `admin`, `manager`, `viewer` (Postgres enum)
+- Admin-only server actions guarded by `requireAdmin()` check
+
+### Database
+
+- Schema in `packages/db/src/schema.ts` — tables: `tenants`, `users`, `accounts`, `sessions`, `verification_tokens`
+- Drizzle Kit for migrations: `pnpm db:generate`, `pnpm db:migrate`, `pnpm db:push`
+- Seed script: `pnpm db:seed` creates initial tenant + admin user
+- `@vercel/postgres` driver for Vercel Postgres (Neon)
 
 ### TypeScript
 
@@ -137,8 +162,10 @@ apps/web/
     layout.tsx                     # Root layout with NextIntlClientProvider
     globals.css                    # Tailwind imports, shadcn theme, brand tokens
     actions/auth.ts                # Server actions for login
+    actions/users.ts               # Server actions for user management (admin)
     components/LoginForm.tsx       # Client Component with useActionState
     dashboard/page.tsx             # Authenticated placeholder
+    dashboard/users/               # User management page (admin)
     api/auth/[...nextauth]/route.ts
 ```
 
@@ -147,8 +174,7 @@ apps/web/
 Each app needs `.env.local` (not committed):
 ```
 NEXTAUTH_SECRET=<generated-secret>
-DEMO_USER_EMAIL=admin@vitah.es
-DEMO_USER_PASSWORD=vitah2026
+POSTGRES_URL=postgres://...
 ```
 
 ## Brand Reference

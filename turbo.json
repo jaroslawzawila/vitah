@@ -5,7 +5,16 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [".next/**", "!.next/cache/**"],
+      "env": ["POSTGRES_URL"]
+    },
+    "db:push": {
+      "cache": false,
+      "env": ["POSTGRES_URL"]
+    },
+    "db:seed": {
+      "cache": false,
+      "env": ["POSTGRES_URL", "SEED_TENANT_NAME", "SEED_ADMIN_EMAIL", "SEED_ADMIN_PASSWORD"]
     },
     "lint": {
       "dependsOn": ["^lint"]

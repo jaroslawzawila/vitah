@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@repo/auth": "workspace:*",
+    "@repo/db": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
     "@repo/ui": "workspace:*",
     "@tailwindcss/postcss": "^4.3.0",

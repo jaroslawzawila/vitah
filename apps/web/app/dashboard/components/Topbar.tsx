@@ -14,6 +14,7 @@ const ROUTE_TITLE_MAP: Record<string, string> = {
   "/dashboard/client-app": "clientApp",
   "/dashboard/finance": "finance",
   "/dashboard/certifications": "certifications",
+  "/dashboard/users": "users",
 };
 
 export default function Topbar() {
