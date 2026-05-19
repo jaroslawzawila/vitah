@@ -1,4 +1,5 @@
-import { hash } from "bcryptjs";
+import bcrypt from "bcryptjs";
+const { hash } = bcrypt;
 import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
 import * as schema from "./schema";
