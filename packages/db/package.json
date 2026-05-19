@@ -17,15 +17,15 @@
     "db:seed": "tsx src/seed.ts"
   },
   "dependencies": {
-    "postgres": "^3.4.5",
     "bcryptjs": "^2.4.3",
-    "drizzle-orm": "^0.35.0"
+    "drizzle-orm": "^0.45.2",
+    "postgres": "^3.4.5"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^22.15.3",
-    "drizzle-kit": "^0.28.0",
+    "drizzle-kit": "^0.31.10",
     "tsx": "^4.19.0",
     "typescript": "5.9.2"
   }

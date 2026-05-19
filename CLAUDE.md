@@ -194,7 +194,7 @@ To reset the database: `docker compose down -v && pnpm db:setup`
 Each app needs `.env.local` (not committed):
 ```
 NEXTAUTH_SECRET=<generated-secret>
-POSTGRES_URL=postgres://vitah:vitah_dev@localhost:5432/vitah   # local Docker default
+POSTGRES_URL=postgres://vitah:vitah_dev@localhost:4432/vitah   # local Docker default
 ```
 
 On Vercel, `POSTGRES_URL` is injected automatically from the linked Vercel Postgres store.
