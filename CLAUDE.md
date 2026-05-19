@@ -17,8 +17,8 @@ Turborepo monorepo with pnpm@9.0.0 workspaces.
 
 | Package | Name | Purpose |
 |---------|------|---------|
-| `packages/auth` | `@repo/auth` | NextAuth.js v5 config (Credentials provider, JWT sessions, Drizzle adapter) |
-| `packages/db` | `@repo/db` | Drizzle ORM schema, database client, seed script (Vercel Postgres) |
+| `packages/auth` | `@repo/auth` | NextAuth.js v5 config (Credentials provider, JWT sessions) |
+| `packages/db` | `@repo/db` | Drizzle ORM schema, database client, seed script (postgres.js driver) |
 | `packages/shared` | `@repo/ui` | React UI components (exports `./src/*.tsx`) |
 | `packages/tailwind-config` | `@repo/tailwind-config` | Shared Tailwind v4 theme with ViTAH brand tokens |
 | `packages/eslint-config` | `@repo/eslint-config` | ESLint configs (`./base`, `./next-js`, `./react-internal`) |
@@ -34,10 +34,14 @@ pnpm exec turbo build --filter=web   # Build web only
 pnpm exec turbo lint                 # Lint all
 pnpm exec turbo check-types          # Type check all
 pnpm run format                      # Prettier format all
+pnpm db:up                           # Start local PostgreSQL (Docker)
+pnpm db:down                         # Stop local PostgreSQL
+pnpm db:setup                        # Full local DB bootstrap (start + push + seed)
 pnpm db:push                         # Push schema to database
 pnpm db:generate                     # Generate migration files
 pnpm db:migrate                      # Apply migrations
 pnpm db:seed                         # Seed initial tenant + admin user
+pnpm db:studio                       # Open Drizzle Studio (DB browser)
 ```
 
 ## Tech Stack
@@ -45,7 +49,7 @@ pnpm db:seed                         # Seed initial tenant + admin user
 - **Next.js 16.2.0** (App Router, Turbopack)
 - **React 19.2.0** / TypeScript 5.9.2
 - **NextAuth.js 5.0.0-beta.31** — Credentials provider, JWT sessions, Drizzle adapter
-- **Drizzle ORM 0.35** + **Vercel Postgres** — database layer with multi-tenant schema
+- **Drizzle ORM 0.35** + **postgres.js** — database layer with multi-tenant schema (works with any PostgreSQL)
 - **next-intl 4.12.0** — i18n (Spanish default, English)
 - **Tailwind CSS 4.3.0** + **shadcn/ui** — utility-first CSS with component library
 - **CSS Modules** — used alongside Tailwind for complex layout styles
@@ -119,10 +123,12 @@ When adding any API route, server action, or backend logic:
 
 ### Database
 
+- **Driver:** `postgres` (postgres.js) — works with any PostgreSQL (local Docker, Vercel Postgres, AWS RDS, etc.)
 - Schema in `packages/db/src/schema.ts` — tables: `tenants`, `users`, `accounts`, `sessions`, `verification_tokens`
 - Drizzle Kit for migrations: `pnpm db:generate`, `pnpm db:migrate`, `pnpm db:push`
 - Seed script: `pnpm db:seed` creates initial tenant + admin user
-- `@vercel/postgres` driver for Vercel Postgres (Neon)
+- Local dev: Docker Compose with PostgreSQL 16 (`docker-compose.yml` at root)
+- Vercel: `POSTGRES_URL` injected automatically from linked Vercel Postgres store
 
 ### TypeScript
 
@@ -169,13 +175,29 @@ apps/web/
     api/auth/[...nextauth]/route.ts
 ```
 
+## Local Development Setup
+
+Prerequisites: Docker Desktop
+
+```bash
+pnpm install                         # Install dependencies
+pnpm db:setup                        # Start Postgres + push schema + seed data
+pnpm exec turbo dev --filter=web     # Start web app on localhost:3000
+```
+
+Login with `admin@vitah.es` / `vitah2026`.
+
+To reset the database: `docker compose down -v && pnpm db:setup`
+
 ## Environment Variables
 
 Each app needs `.env.local` (not committed):
 ```
 NEXTAUTH_SECRET=<generated-secret>
-POSTGRES_URL=postgres://...
+POSTGRES_URL=postgres://vitah:vitah_dev@localhost:5432/vitah   # local Docker default
 ```
+
+On Vercel, `POSTGRES_URL` is injected automatically from the linked Vercel Postgres store.
 
 ## Brand Reference
 

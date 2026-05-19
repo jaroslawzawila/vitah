@@ -16,6 +16,19 @@
       "cache": false,
       "env": ["POSTGRES_URL", "SEED_TENANT_NAME", "SEED_ADMIN_EMAIL", "SEED_ADMIN_PASSWORD"]
     },
+    "db:generate": {
+      "cache": false,
+      "env": ["POSTGRES_URL"]
+    },
+    "db:migrate": {
+      "cache": false,
+      "env": ["POSTGRES_URL"]
+    },
+    "db:studio": {
+      "cache": false,
+      "persistent": true,
+      "env": ["POSTGRES_URL"]
+    },
     "lint": {
       "dependsOn": ["^lint"]
     },

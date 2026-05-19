@@ -1,10 +1,16 @@
 import { hash } from "bcryptjs";
-import { sql } from "@vercel/postgres";
-import { drizzle } from "drizzle-orm/vercel-postgres";
+import postgres from "postgres";
+import { drizzle } from "drizzle-orm/postgres-js";
 import * as schema from "./schema";
 
 async function seed() {
-  const db = drizzle(sql, { schema });
+  const connectionString = process.env.POSTGRES_URL;
+  if (!connectionString) {
+    throw new Error("POSTGRES_URL environment variable is not set");
+  }
+
+  const client = postgres(connectionString);
+  const db = drizzle(client, { schema });
 
   const tenantName = process.env.SEED_TENANT_NAME ?? "ViTAH Santander";
   const tenantSlug = tenantName.toLowerCase().replace(/\s+/g, "-");
@@ -21,6 +27,7 @@ async function seed() {
 
   if (!tenant) {
     console.log(`Tenant "${tenantName}" already exists, skipping.`);
+    await client.end();
     process.exit(0);
   }
 
@@ -40,6 +47,7 @@ async function seed() {
     .onConflictDoNothing();
 
   console.log(`Seeded tenant "${tenantName}" with admin user: ${email}`);
+  await client.end();
   process.exit(0);
 }
 
