@@ -21,7 +21,9 @@ export default function Topbar() {
   const pathname = usePathname();
   const t = useTranslations("topbar");
 
-  const titleKey = ROUTE_TITLE_MAP[pathname] ?? "dashboard";
+  // Handle dynamic project detail routes
+  const isProjectDetail = pathname.startsWith("/dashboard/projects/") && pathname !== "/dashboard/projects";
+  const titleKey = isProjectDetail ? "projectDetail" : (ROUTE_TITLE_MAP[pathname] ?? "dashboard");
 
   return (
     <header className={styles.topbar}>

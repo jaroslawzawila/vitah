@@ -38,7 +38,8 @@
       "clientApp": "Client App — Site Tracking",
       "finance": "Finance — Management & Billing",
       "certifications": "ViTAH Certifications",
-      "users": "User Management"
+      "users": "User Management",
+      "projectDetail": "Project Detail"
     },
     "synced": "synced",
     "newProject": "New Project",
@@ -131,6 +132,7 @@
       "all": "All ({count})",
       "export": "Export"
     },
+    "newProject": "New Project",
     "table": {
       "ref": "Reference",
       "client": "Client",
@@ -151,6 +153,34 @@
       "logistics": "Logistics",
       "construction": "On Site",
       "certified": "Certified"
+    },
+    "createForm": {
+      "ref": "Reference",
+      "refPlaceholder": "VTH-26-007",
+      "clientName": "Client",
+      "clientPlaceholder": "Client name",
+      "areaM2": "Area (m²)",
+      "type": "Type",
+      "location": "Location",
+      "locationPlaceholder": "Santander",
+      "budget": "Budget (€)",
+      "qualityLevel": "Quality",
+      "create": "Create project",
+      "cancel": "Cancel",
+      "types": {
+        "unifamiliar": "Detached",
+        "adosado": "Semi-detached",
+        "duplex": "Duplex"
+      },
+      "levels": {
+        "standard": "Standard",
+        "premium": "Premium",
+        "luxury": "Luxury"
+      },
+      "errors": {
+        "missing_fields": "All required fields must be filled.",
+        "ref_exists": "A project with that reference already exists."
+      }
     }
   },
   "technicalPage": {
@@ -391,6 +421,194 @@
       },
       "issuedDigitally": "Digitally issued",
       "download": "Download Certificate PDF"
+    }
+  },
+  "projectDetailPage": {
+    "notFound": "Project not found",
+    "backToProjects": "Back to projects",
+    "header": {
+      "edit": "Edit",
+      "save": "Save",
+      "cancel": "Cancel",
+      "delete": "Delete project",
+      "confirmDelete": "Are you sure you want to delete this project?",
+      "week": "Week {current}/{total}",
+      "budget": "Budget",
+      "spent": "Spent",
+      "startDate": "Start",
+      "delivery": "Est. delivery",
+      "advisor": "Advisor",
+      "qualityLevel": "Quality"
+    },
+    "tabs": {
+      "overview": "Overview",
+      "construction": "Construction",
+      "technical": "Technical",
+      "logistics": "Logistics",
+      "finance": "Finance",
+      "documents": "Documents"
+    },
+    "overview": {
+      "pipeline": "Project Pipeline",
+      "keyDates": "Key Dates",
+      "startDate": "Start date",
+      "expectedDelivery": "Expected delivery",
+      "daysRemaining": "days remaining",
+      "alerts": "Alerts & Blockers",
+      "noAlerts": "No active alerts",
+      "recentActivity": "Recent Activity",
+      "noActivity": "No activity recorded",
+      "upcomingDeadlines": "Upcoming Deadlines"
+    },
+    "construction": {
+      "milestones": "Construction Milestones",
+      "photos": "photos",
+      "qualityControl": "Quality Control",
+      "addQc": "Add QC",
+      "qcName": "Name",
+      "qcDetail": "Detail",
+      "qcValue": "Measured value",
+      "qcResult": "Result",
+      "noMilestones": "No milestones recorded"
+    },
+    "technical": {
+      "tasks": "Technical Tasks",
+      "addTask": "New Task",
+      "title": "Title",
+      "department": "Department",
+      "priority": "Priority",
+      "status": "Status",
+      "assignee": "Assigned to",
+      "dueDate": "Due date",
+      "noTasks": "No tasks recorded",
+      "departments": {
+        "architecture": "Architecture",
+        "structural": "Structural",
+        "installations": "Installations",
+        "documentation": "Documentation",
+        "bim": "BIM"
+      },
+      "priorities": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "statuses": {
+        "pending": "Pending",
+        "in_process": "In Process",
+        "in_review": "In Review",
+        "completed": "Completed"
+      }
+    },
+    "logistics": {
+      "orders": "Material Orders",
+      "addOrder": "New Order",
+      "material": "Material",
+      "supplier": "Supplier",
+      "quantity": "Quantity",
+      "orderDate": "Order date",
+      "eta": "ETA",
+      "status": "Status",
+      "jitWeek": "JIT Week",
+      "noOrders": "No orders recorded",
+      "jitTimeline": "JIT Timeline",
+      "statuses": {
+        "pending": "Pending",
+        "ordered": "Ordered",
+        "confirmed": "Confirmed",
+        "in_transit": "In Transit",
+        "delivered": "Delivered"
+      }
+    },
+    "finance": {
+      "budgetOverview": "Budget Overview",
+      "total": "Total",
+      "spent": "Spent",
+      "remaining": "Remaining",
+      "consumed": "consumed",
+      "invoices": "Invoices",
+      "addInvoice": "New Invoice",
+      "amount": "Amount",
+      "description": "Description",
+      "dueDate": "Due date",
+      "status": "Status",
+      "noInvoices": "No invoices recorded",
+      "markPaid": "Mark paid",
+      "statuses": {
+        "draft": "Draft",
+        "issued": "Issued",
+        "due_soon": "Due soon",
+        "paid": "Paid",
+        "overdue": "Overdue"
+      }
+    },
+    "documents": {
+      "title": "Project Documents",
+      "addDocument": "Add Document",
+      "fileName": "File name",
+      "fileUrl": "File URL",
+      "noDocuments": "No documents in this category",
+      "categories": {
+        "basic_project": "Basic Project",
+        "construction_plans": "Construction Plans",
+        "licenses": "Licenses",
+        "quality_control": "Quality Control",
+        "photos": "Photographs",
+        "certifications": "Certifications",
+        "warranties": "Warranties",
+        "building_book": "Building Book",
+        "insurance": "Insurance"
+      }
+    },
+    "phases": {
+      "showroom": "Showroom",
+      "budget": "Budget",
+      "technical": "Technical Dept.",
+      "review": "Review",
+      "dossier": "Dossier",
+      "logistics": "Logistics",
+      "construction": "On Site",
+      "certified": "Certified"
+    },
+    "types": {
+      "unifamiliar": "Detached",
+      "adosado": "Semi-detached",
+      "duplex": "Duplex"
+    },
+    "qualityLevels": {
+      "standard": "Standard",
+      "premium": "Premium",
+      "luxury": "Luxury"
+    },
+    "actions": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "edit": "Edit",
+      "create": "Create",
+      "close": "Close"
+    },
+    "activityActions": {
+      "project_created": "Project created",
+      "project_updated": "Project updated",
+      "phase_changed": "Phase changed",
+      "milestone_updated": "Milestone updated",
+      "milestone_completed": "Milestone completed",
+      "qc_created": "QC created",
+      "qc_passed": "QC passed",
+      "qc_failed": "QC failed",
+      "qc_updated": "QC updated",
+      "task_created": "Task created",
+      "task_updated": "Task updated",
+      "task_deleted": "Task deleted",
+      "order_created": "Order created",
+      "order_updated": "Order updated",
+      "invoice_created": "Invoice created",
+      "invoice_updated": "Invoice updated",
+      "invoice_paid": "Invoice paid",
+      "document_uploaded": "Document uploaded",
+      "project_certified": "Project certified",
+      "order_delivered": "Order delivered"
     }
   },
   "usersPage": {

@@ -38,7 +38,8 @@
       "clientApp": "App Cliente — Seguimiento de Obra",
       "finance": "Finanzas — Gestión & Facturación",
       "certifications": "Certificaciones ViTAH",
-      "users": "Gestión de Usuarios"
+      "users": "Gestión de Usuarios",
+      "projectDetail": "Detalle de Proyecto"
     },
     "synced": "sincronizados",
     "newProject": "Nuevo Proyecto",
@@ -131,6 +132,7 @@
       "all": "Todos ({count})",
       "export": "Exportar"
     },
+    "newProject": "Nuevo Proyecto",
     "table": {
       "ref": "Referencia",
       "client": "Cliente",
@@ -151,6 +153,34 @@
       "logistics": "Logística",
       "construction": "En Obra",
       "certified": "Certificado"
+    },
+    "createForm": {
+      "ref": "Referencia",
+      "refPlaceholder": "VTH-26-007",
+      "clientName": "Cliente",
+      "clientPlaceholder": "Nombre del cliente",
+      "areaM2": "Superficie (m²)",
+      "type": "Tipo",
+      "location": "Localización",
+      "locationPlaceholder": "Santander",
+      "budget": "Presupuesto (€)",
+      "qualityLevel": "Calidad",
+      "create": "Crear proyecto",
+      "cancel": "Cancelar",
+      "types": {
+        "unifamiliar": "Unifamiliar",
+        "adosado": "Adosado",
+        "duplex": "Dúplex"
+      },
+      "levels": {
+        "standard": "Estándar",
+        "premium": "Premium",
+        "luxury": "Luxury"
+      },
+      "errors": {
+        "missing_fields": "Todos los campos obligatorios deben completarse.",
+        "ref_exists": "Ya existe un proyecto con esa referencia."
+      }
     }
   },
   "technicalPage": {
@@ -391,6 +421,194 @@
       },
       "issuedDigitally": "Emitido digitalmente",
       "download": "Descargar Certificado PDF"
+    }
+  },
+  "projectDetailPage": {
+    "notFound": "Proyecto no encontrado",
+    "backToProjects": "Volver a proyectos",
+    "header": {
+      "edit": "Editar",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "delete": "Eliminar proyecto",
+      "confirmDelete": "¿Seguro que deseas eliminar este proyecto?",
+      "week": "Semana {current}/{total}",
+      "budget": "Presupuesto",
+      "spent": "Gastado",
+      "startDate": "Inicio",
+      "delivery": "Entrega est.",
+      "advisor": "Asesor",
+      "qualityLevel": "Calidad"
+    },
+    "tabs": {
+      "overview": "Resumen",
+      "construction": "Obra",
+      "technical": "Técnico",
+      "logistics": "Logística",
+      "finance": "Finanzas",
+      "documents": "Documentos"
+    },
+    "overview": {
+      "pipeline": "Pipeline del Proyecto",
+      "keyDates": "Fechas Clave",
+      "startDate": "Fecha de inicio",
+      "expectedDelivery": "Entrega estimada",
+      "daysRemaining": "días restantes",
+      "alerts": "Alertas y Bloqueos",
+      "noAlerts": "Sin alertas activas",
+      "recentActivity": "Actividad Reciente",
+      "noActivity": "Sin actividad registrada",
+      "upcomingDeadlines": "Próximos Vencimientos"
+    },
+    "construction": {
+      "milestones": "Hitos de Obra",
+      "photos": "fotos",
+      "qualityControl": "Control de Calidad",
+      "addQc": "Añadir QC",
+      "qcName": "Nombre",
+      "qcDetail": "Detalle",
+      "qcValue": "Valor medido",
+      "qcResult": "Resultado",
+      "noMilestones": "Sin hitos registrados"
+    },
+    "technical": {
+      "tasks": "Tareas Técnicas",
+      "addTask": "Nueva Tarea",
+      "title": "Título",
+      "department": "Departamento",
+      "priority": "Prioridad",
+      "status": "Estado",
+      "assignee": "Asignado a",
+      "dueDate": "Fecha límite",
+      "noTasks": "Sin tareas registradas",
+      "departments": {
+        "architecture": "Arquitectura",
+        "structural": "Estructural",
+        "installations": "Instalaciones",
+        "documentation": "Documentación",
+        "bim": "BIM"
+      },
+      "priorities": {
+        "low": "Baja",
+        "medium": "Media",
+        "high": "Alta"
+      },
+      "statuses": {
+        "pending": "Pendiente",
+        "in_process": "En Proceso",
+        "in_review": "En Revisión",
+        "completed": "Completada"
+      }
+    },
+    "logistics": {
+      "orders": "Pedidos de Material",
+      "addOrder": "Nuevo Pedido",
+      "material": "Material",
+      "supplier": "Proveedor",
+      "quantity": "Cantidad",
+      "orderDate": "Fecha pedido",
+      "eta": "ETA",
+      "status": "Estado",
+      "jitWeek": "Semana JIT",
+      "noOrders": "Sin pedidos registrados",
+      "jitTimeline": "Cronograma JIT",
+      "statuses": {
+        "pending": "Pendiente",
+        "ordered": "Pedido",
+        "confirmed": "Confirmado",
+        "in_transit": "En Tránsito",
+        "delivered": "Entregado"
+      }
+    },
+    "finance": {
+      "budgetOverview": "Resumen Presupuestario",
+      "total": "Total",
+      "spent": "Gastado",
+      "remaining": "Restante",
+      "consumed": "consumido",
+      "invoices": "Facturas",
+      "addInvoice": "Nueva Factura",
+      "amount": "Importe",
+      "description": "Descripción",
+      "dueDate": "Vencimiento",
+      "status": "Estado",
+      "noInvoices": "Sin facturas registradas",
+      "markPaid": "Marcar pagada",
+      "statuses": {
+        "draft": "Borrador",
+        "issued": "Emitida",
+        "due_soon": "Vence pronto",
+        "paid": "Pagada",
+        "overdue": "Vencida"
+      }
+    },
+    "documents": {
+      "title": "Documentos del Proyecto",
+      "addDocument": "Añadir Documento",
+      "fileName": "Nombre del archivo",
+      "fileUrl": "URL del archivo",
+      "noDocuments": "Sin documentos en esta categoría",
+      "categories": {
+        "basic_project": "Proyecto Básico",
+        "construction_plans": "Planos de Obra",
+        "licenses": "Licencias",
+        "quality_control": "Control Calidad",
+        "photos": "Fotografías",
+        "certifications": "Certificaciones",
+        "warranties": "Garantías",
+        "building_book": "Libro Edificio",
+        "insurance": "Seguros"
+      }
+    },
+    "phases": {
+      "showroom": "Showroom",
+      "budget": "Presupuesto",
+      "technical": "Dpto. Técnico",
+      "review": "Revisión",
+      "dossier": "Dossier",
+      "logistics": "Logística",
+      "construction": "En Obra",
+      "certified": "Certificado"
+    },
+    "types": {
+      "unifamiliar": "Unifamiliar",
+      "adosado": "Adosado",
+      "duplex": "Dúplex"
+    },
+    "qualityLevels": {
+      "standard": "Estándar",
+      "premium": "Premium",
+      "luxury": "Luxury"
+    },
+    "actions": {
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "delete": "Eliminar",
+      "edit": "Editar",
+      "create": "Crear",
+      "close": "Cerrar"
+    },
+    "activityActions": {
+      "project_created": "Proyecto creado",
+      "project_updated": "Proyecto actualizado",
+      "phase_changed": "Fase cambiada",
+      "milestone_updated": "Hito actualizado",
+      "milestone_completed": "Hito completado",
+      "qc_created": "QC creado",
+      "qc_passed": "QC aprobado",
+      "qc_failed": "QC fallido",
+      "qc_updated": "QC actualizado",
+      "task_created": "Tarea creada",
+      "task_updated": "Tarea actualizada",
+      "task_deleted": "Tarea eliminada",
+      "order_created": "Pedido creado",
+      "order_updated": "Pedido actualizado",
+      "invoice_created": "Factura creada",
+      "invoice_updated": "Factura actualizada",
+      "invoice_paid": "Factura pagada",
+      "document_uploaded": "Documento subido",
+      "project_certified": "Proyecto certificado",
+      "order_delivered": "Pedido entregado"
     }
   },
   "usersPage": {
