@@ -19,23 +19,34 @@ async function seed() {
   const password = process.env.SEED_ADMIN_PASSWORD ?? "vitah2026";
   const name = process.env.SEED_ADMIN_NAME ?? "ViTAH Admin";
 
-  // Create tenant
-  const [tenant] = await db
+  // Create or find tenant
+  let [tenant] = await db
     .insert(schema.tenants)
     .values({ name: tenantName, slug: tenantSlug })
     .onConflictDoNothing({ target: schema.tenants.slug })
     .returning({ id: schema.tenants.id });
 
   if (!tenant) {
-    console.log(`Tenant "${tenantName}" already exists, skipping.`);
-    await client.end();
-    process.exit(0);
+    // Tenant already exists — look it up
+    const existing = await db.query.tenants.findFirst({
+      where: (t, { eq }) => eq(t.slug, tenantSlug),
+      columns: { id: true },
+    });
+    if (!existing) {
+      console.error("Could not find existing tenant");
+      await client.end();
+      process.exit(1);
+    }
+    tenant = existing;
+    console.log(`Tenant "${tenantName}" already exists, continuing with project seed...`);
+  } else {
+    console.log(`Created tenant "${tenantName}"`);
   }
 
-  // Create admin user
+  // Create or find admin user
   const passwordHash = await hash(password, 12);
 
-  const [adminUser] = await db
+  let [adminUser] = await db
     .insert(schema.users)
     .values({
       tenantId: tenant.id,
@@ -48,7 +59,15 @@ async function seed() {
     .onConflictDoNothing()
     .returning({ id: schema.users.id });
 
-  console.log(`Seeded tenant "${tenantName}" with admin user: ${email}`);
+  if (!adminUser) {
+    const existingUser = await db.query.users.findFirst({
+      where: (u, { eq, and }) => and(eq(u.tenantId, tenant.id), eq(u.email, email)),
+      columns: { id: true },
+    });
+    adminUser = existingUser ?? undefined;
+  }
+
+  console.log(`Admin user: ${email}`);
 
   // --- Seed Projects ---
 
