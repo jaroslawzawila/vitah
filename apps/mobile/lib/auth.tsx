@@ -1,0 +1,87 @@
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
+import * as SecureStore from "expo-secure-store";
+import { api, type AuthUser } from "./api";
+
+const TOKEN_KEY = "vitah_token";
+const USER_KEY = "vitah_user";
+
+type AuthState = {
+  token: string | null;
+  user: AuthUser | null;
+  isLoading: boolean;
+};
+
+type AuthContextValue = AuthState & {
+  signIn: (email: string, password: string) => Promise<{ error?: string }>;
+  signOut: () => Promise<void>;
+};
+
+const AuthContext = createContext<AuthContextValue | null>(null);
+
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [state, setState] = useState<AuthState>({
+    token: null,
+    user: null,
+    isLoading: true,
+  });
+
+  useEffect(() => {
+    async function restore() {
+      try {
+        const [token, userJson] = await Promise.all([
+          SecureStore.getItemAsync(TOKEN_KEY),
+          SecureStore.getItemAsync(USER_KEY),
+        ]);
+        if (token && userJson) {
+          setState({ token, user: JSON.parse(userJson) as AuthUser, isLoading: false });
+        } else {
+          setState((s) => ({ ...s, isLoading: false }));
+        }
+      } catch {
+        setState((s) => ({ ...s, isLoading: false }));
+      }
+    }
+    void restore();
+  }, []);
+
+  const signIn = useCallback(
+    async (email: string, password: string): Promise<{ error?: string }> => {
+      const result = await api.signIn(email, password);
+      if (result.error) return { error: result.error };
+
+      await Promise.all([
+        SecureStore.setItemAsync(TOKEN_KEY, result.token),
+        SecureStore.setItemAsync(USER_KEY, JSON.stringify(result.user)),
+      ]);
+      setState({ token: result.token, user: result.user, isLoading: false });
+      return {};
+    },
+    []
+  );
+
+  const signOut = useCallback(async () => {
+    await Promise.all([
+      SecureStore.deleteItemAsync(TOKEN_KEY),
+      SecureStore.deleteItemAsync(USER_KEY),
+    ]);
+    setState({ token: null, user: null, isLoading: false });
+  }, []);
+
+  return (
+    <AuthContext.Provider value={{ ...state, signIn, signOut }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+export function useAuth(): AuthContextValue {
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
+  return ctx;
+}
